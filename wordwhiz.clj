@@ -21,33 +21,35 @@
   ;;FIXME: pick this up at load
   )
 
-(def tile-data
-  '((\E 1 12)
-    (\A 1 9)
-    (\I 1 9)
-    (\O 1 8)
-    (\N 1 6)
-    (\R 1 6)
-    (\T 1 6)
-    (\L 1 4)
-    (\S 1 4)
-    (\U 1 4)
-    (\D 2 4)
-    (\G 2 3)
-    (\B 3 2)
-    (\C 3 2)
-    (\M 3 2)
-    (\P 3 2)
-    (\F 4 2)
-    (\H 4 2)
-    (\V 4 2)
-    (\W 4 2)
-    (\Y 4 2)
-    (\K 5 1)
-    (\J 8 1)
-    (\X 8 1)
-    (\Q 10 1)
-    (\Z 10 1)))    ;; Scrabble(tm) also (\SPACE 0 2)
+(defstruct tile-data :value :frequency)
+(def tile-distr
+  { \E (struct-map tile-data :value 1 :frequency 12)
+    \A (struct-map tile-data :value 1 :frequency 9)
+    \I (struct-map tile-data :value 1 :frequency 9)
+    \O (struct-map tile-data :value 1 :frequency 8)
+    \N (struct-map tile-data :value 1 :frequency 6)
+    \R (struct-map tile-data :value 1 :frequency 6)
+    \T (struct-map tile-data :value 1 :frequency 6)
+    \L (struct-map tile-data :value 1 :frequency 4)
+    \S (struct-map tile-data :value 1 :frequency 4)
+    \U (struct-map tile-data :value 1 :frequency 4)
+    \D (struct-map tile-data :value 2 :frequency 4)
+    \G (struct-map tile-data :value 2 :frequency 3)
+    \B (struct-map tile-data :value 3 :frequency 2)
+    \C (struct-map tile-data :value 3 :frequency 2)
+    \M (struct-map tile-data :value 3 :frequency 2)
+    \P (struct-map tile-data :value 3 :frequency 2)
+    \F (struct-map tile-data :value 4 :frequency 2)
+    \H (struct-map tile-data :value 4 :frequency 2)
+    \V (struct-map tile-data :value 4 :frequency 2)
+    \W (struct-map tile-data :value 4 :frequency 2)
+    \Y (struct-map tile-data :value 4 :frequency 2)
+    \K (struct-map tile-data :value 5 :frequency 1)
+    \J (struct-map tile-data :value 8 :frequency 1)
+    \X (struct-map tile-data :value 8 :frequency 1)
+    \Q (struct-map tile-data :value 10 :frequency 1)
+    \Z (struct-map tile-data :value 10 :frequency 1) }
+  )    ;; Scrabble(tm) also (\SPACE 0 2)
 
 (defn read-dict [fn]
   "Read a wordlist from a file, returning the newly created set"
@@ -60,7 +62,9 @@
 
 (defn tileset []
   "Return a shuffled set of letters (tiles)"
-  (shuffle (for [[letter _ freq] tile-data] (replicate freq letter))))
+  (shuffle
+   (flatten
+    (for [ letter (keys tile-dist) ] (replicate (:frequency (get tile-dist letter)) letter)))))
 
 
 (defn valid-word? [word dict]
