@@ -87,6 +87,9 @@ on tile distribution and word length"
   (* (.length w) (reduce + (for [idx (range 0 (.length w))]
                              (:value (get tile-distr (.charAt w idx)))))))
 
+(defn rack-full? [game]
+  (if (>= (:rack game) rack-size) true false))
+
 (def game-defaults {:tiles (tileset)
                     :history nil
                     :score 0
