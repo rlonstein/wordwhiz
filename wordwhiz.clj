@@ -9,7 +9,8 @@
 
 (ns com.lonsteins.wordwhiz
   (:require (clojure.contrib)
-            (clojure.contrib.seq-utils))
+            (clojure.contrib.seq-utils)
+            [clojure.string :as str])
   (:import (java.util HashSet)
            (javax.swing JFrame JPanel JButton JTextField JLabel SwingUtilities)
            (net.miginfocom.layout)
@@ -87,6 +88,10 @@ on tile distribution and word length"
   (* (.length w) (reduce + (for [idx (range 0 (.length w))]
                              (:value (get tile-distr (.charAt w idx)))))))
 
+(defn rack-to-string [game]
+  "Return the rack (list) as a string"
+  (str/join "" (:rack game)))
+
 (defn score-rack [game]
   "Score the rack, updating game state, checking validity in game dictionary"
   ;;FIXME
@@ -94,6 +99,11 @@ on tile distribution and word length"
 
 (defn rack-full? [game]
   (if (>= (:rack game) rack-size) true false))
+
+(defn rack-tile [col game]
+  "Append a tile from the given column to the rack. Returns the tile on success, nil on failure"
+      ;;FIXME
+      ))
 
 (defn ui-rack-tile [col game]
   ;;FIXME
