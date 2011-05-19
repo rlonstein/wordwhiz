@@ -95,5 +95,6 @@ on tile distribution and word length"
                     :dictionary (read-dict dictfile)})
 
 (defn new-game []
-  "Return a default game state"
-  (merge (struct game-state) game-defaults))
+  "Return a new populated game state"
+  (let [g (merge (struct game-state) game-defaults {:tiles (tileset)})]
+    (merge g {:board (fill-board (:tiles g))})))
