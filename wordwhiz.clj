@@ -11,13 +11,15 @@
   (:require (clojure.contrib)
             (clojure.contrib.seq-utils))
   (:import (java.util HashSet)
-           (javax.swing JFrame JPanel JButton JTextField JLabel SwingUtilities))
+           (javax.swing JFrame JPanel JButton JTextField JLabel SwingUtilities)
+           (net.miginfocom.layout)
+           (net.miginfocom.swing))
   (:use (clojure.contrib miglayout swing-utils)))
 
-(def board-dim '(10 8))
+(def board-dim {:x 12 :y 7})
 (def rack-size 16)
 (def max-word-length rack-size)
-(def dictfile
+(def dictfile "/Users/lonstein/git/wordwhiz.clj/word.list"
   ;;FIXME: pick this up at load
   )
 
@@ -51,6 +53,9 @@
     \Z (struct-map tile-data :value 10 :frequency 1) }
   )    ;; Scrabble(tm) also (\SPACE 0 2)
 
+
+(defstruct game-state :tiles :history :score :board :rack :dictionary)
+
 (defn read-dict [fn]
   "Read a wordlist from a file, returning the newly created set"
   (let [dict (HashSet. 100000)]
@@ -59,15 +64,36 @@
       (doseq [ln (line-seq reader)] (.add dict (.toUpperCase ln))))
     dict))
 
-
 (defn tileset []
   "Return a shuffled set of letters (tiles)"
   (shuffle
    (flatten
-    (for [ letter (keys tile-dist) ] (replicate (:frequency (get tile-dist letter)) letter)))))
+    (for [ letter (keys tile-distr) ] (replicate (:frequency (get tile-distr letter)) letter)))))
 
+(defn fill-board [tiles]
+  "Produce a game board as a vector of vectors from the supplied collection"
+  (for [x (range 0 (:x board-dim))]
+    (let [ start (* (:y board-dim) x) end (+ start (:y board-dim))]
+      (subvec tiles start end))))
 
 (defn valid-word? [word dict]
   "Check word against the dictionary"
   ;; this is just to hide the implementation...
   (.contains dict (.toUpper word)))
+
+(defn score-word [w]
+  "Tally the values of the letters in a word based
+on tile distribution and word length"
+  (* (.length w) (reduce + (for [idx (range 0 (.length w))]
+                             (:value (get tile-distr (.charAt w idx)))))))
+
+(def game-defaults {:tiles (tileset)
+                    :history nil
+                    :score 0
+                    :board nil
+                    :rack nil
+                    :dictionary (read-dict dictfile)})
+
+(defn new-game []
+  "Return a default game state"
+  (merge (struct game-state) game-defaults))
