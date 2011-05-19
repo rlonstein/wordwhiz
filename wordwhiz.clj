@@ -80,7 +80,7 @@
 (defn valid-word? [word dict]
   "Check word against the dictionary"
   ;; this is just to hide the implementation...
-  (.contains dict (.toUpper word)))
+  (.contains dict (.toUpperCase word)))
 
 (defn score-word [w]
   "Tally the values of the letters in a word based
@@ -93,17 +93,21 @@ on tile distribution and word length"
   (str/join "" (:rack game)))
 
 (defn score-rack [game]
-  "Score the rack, updating game state, checking validity in game dictionary"
-  ;;FIXME
-  )
+  "Score the rack, checking validity in game dictionary, returns the new game state"
+  (let [ word (rack-to-string game)]
+    (if (valid-word? word (:dictionary game))
+      (merge game {:rack nil
+                   :history (conj (:history game) \S (:score game))
+                   :score (+ (score-word word) (:score game))})
+      game)))
 
 (defn rack-full? [game]
   (if (>= (:rack game) rack-size) true false))
 
 (defn rack-tile [col game]
   "Append a tile from the given column to the rack. Returns the tile on success, nil on failure"
-      ;;FIXME
-      ))
+  ;;FIXME
+  )
 
 (defn ui-rack-tile [col game]
   ;;FIXME
