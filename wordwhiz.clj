@@ -87,10 +87,28 @@ on tile distribution and word length"
   (* (.length w) (reduce + (for [idx (range 0 (.length w))]
                              (:value (get tile-distr (.charAt w idx)))))))
 
+(defn score-rack [game]
+  "Score the rack, updating game state, checking validity in game dictionary"
+  ;;FIXME
+  )
+
 (defn rack-full? [game]
   (if (>= (:rack game) rack-size) true false))
 
-(def game-defaults {:tiles (tileset)
+(defn ui-rack-tile [col game]
+  ;;FIXME
+  )
+
+(defn undo-move [game]
+  "Rewind actions from the game history"
+  ;;FIXME
+  )
+
+(defn ui-undo-move [game]
+  ;;FIXME
+  )
+
+(def game-defaults {:tiles nil
                     :history nil
                     :score 0
                     :board nil
