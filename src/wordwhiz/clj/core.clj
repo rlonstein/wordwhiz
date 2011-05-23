@@ -1,28 +1,22 @@
 ;;;
 ;;; Wordwhiz -- A word puzzle game
 ;;;
-;;; utils.clj
-;;;
 ;;; Copyright (c) R. Lonstein
 ;;; Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 ;;;
 
-(ns com.lonsteins.wordwhiz
+(ns wordwhiz.clj.core
   (:require (clojure.contrib)
+            (clojure.java.io)
             (clojure.contrib.seq-utils)
             [clojure.string :as str])
   (:import (java.util HashSet)
-           (javax.swing JFrame JPanel JButton JTextField JLabel SwingUtilities)
-           (net.miginfocom.layout)
-           (net.miginfocom.swing))
-  (:use (clojure.contrib miglayout swing-utils)))
+           (javax.swing JFrame JPanel JButton JTextField JLabel SwingUtilities)))
 
 (def board-dim {:x 12 :y 7})
 (def rack-size 16)
 (def max-word-length rack-size)
-(def dictfile "/Users/lonstein/git/wordwhiz.clj/word.list"
-  ;;FIXME: pick this up at load
-  )
+(def dictfile (. ClassLoader getSystemResource "word.list"))
 
 (defstruct tile-data :value :frequency)
 (def tile-distr
@@ -60,8 +54,7 @@
 (defn read-dict [fn]
   "Read a wordlist from a file, returning the newly created set"
   (let [dict (HashSet. 100000)]
-    (with-open [reader (java.io.BufferedReader.
-                        (java.io.FileReader. fn))]
+    (with-open [reader (clojure.java.io/reader fn)]
       (doseq [ln (line-seq reader)] (.add dict (.toUpperCase ln))))
     dict))
 
@@ -133,3 +126,7 @@ on tile distribution and word length"
   "Return a new populated game state"
   (let [g (merge (struct game-state) game-defaults {:tiles (tileset)})]
     (merge g {:board (fill-board (:tiles g))})))
+
+
+(defn -main [& args]
+  (println "FIXME: implement something useful here..."))
