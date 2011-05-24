@@ -1,5 +1,5 @@
 ;;;
-;;; Wordwhiz -- A word puzzle game
+;;; Wordwhiz -- A letter tile game
 ;;;
 ;;; Copyright (c) R. Lonstein
 ;;; Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php

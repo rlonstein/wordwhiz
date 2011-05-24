@@ -4,7 +4,7 @@ A letter tile game inspired by the Tivo(R) Wordsmith game by Carl Haynes
 
 ## Prerequisites
 
-Java 1.5 or later
+Java 1.6 or later
 
 ## License
 
