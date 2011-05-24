@@ -3,7 +3,10 @@
   :license {:name "MIT License"
             :url "http://www.opensource.org/licenses/mit-license.php"}
   :dependencies [[org.clojure/clojure "1.2.0"]
-                 [org.apache.pivot/pivot "2.0"]]
+                 [org.clojure/clojure-contrib "1.2.0"]
+                 [org.apache.pivot/pivot-core "2.0"]
+                 [org.apache.pivot/pivot-wtk "2.0"]
+                 [org.apache.pivot/pivot-wtk-terra "2.0"]]
   :jar-name "wordwhiz.jar"
   :warn-on-reflection true
   :main wordwhiz.clj.core

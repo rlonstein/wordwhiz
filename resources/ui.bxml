@@ -6,18 +6,18 @@
                       showHorizontalGridLines:true, showVerticalGridLines:true}"
               bxml:id="gridpane">
       <GridPane.Row>
-        <Button/>
-        <Button/>
-        <Button/>
-        <Button/>
-        <Button/>
-        <Button/>
-        <Button/>
-        <Button/>
-        <Button/>
-        <Button/>
-        <Button/>
-        <Button/>
+        <PushButton/>
+        <PushButton/>
+        <PushButton/>
+        <PushButton/>
+        <PushButton/>
+        <PushButton/>
+        <PushButton/>
+        <PushButton/>
+        <PushButton/>
+        <PushButton/>
+        <PushButton/>
+        <PushButton/>
       </GridPane.Row>
       <GridPane.Row>
         <ImageView/>
