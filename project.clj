@@ -11,5 +11,6 @@
                      [clojure-source "1.2.0"]]
   :jar-name "wordwhiz.jar"
   :warn-on-reflection true
-  :main wordwhiz.clj.core
-  :aot [wordwhiz.clj.core])
+  :main wordwhiz.clj.ui
+  :aot [wordwhiz.clj.core
+        wordwhiz.clj.ui])

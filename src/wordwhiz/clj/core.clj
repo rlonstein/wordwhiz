@@ -10,8 +10,7 @@
             (clojure.java.io)
             (clojure.contrib.seq-utils)
             [clojure.string :as str])
-  (:import (java.util HashSet)
-           (javax.swing JFrame JPanel JButton JTextField JLabel SwingUtilities)))
+  (:import (java.util HashSet)))
 
 (def board-dim {:x 12 :y 7})
 (def rack-size 16)
@@ -106,6 +105,10 @@ on tile distribution and word length"
   ;;FIXME
   )
 
+(defn ui-update-board [game]
+  ;;FIXME
+  )
+
 (defn undo-move [game]
   "Rewind actions from the game history"
   ;;FIXME
@@ -129,4 +132,9 @@ on tile distribution and word length"
 
 
 (defn -main [& args]
-  (println "FIXME: implement something useful here..."))
+  ;;FIXME: do something useful here
+  (printf "Dictionary %s\n" dictfile)
+  (let [ g (new-game)]
+    (printf "Have %d words in game dictionary\n" (count (:dictionary g) ))
+    (println "FIXME: implement something useful here...")))
+
