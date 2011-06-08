@@ -1,108 +1,98 @@
 <Window title="Wordwhiz" maximized="true"
         xmlns:bxml="http://pivot.apache.org/bxml" xmlns="org.apache.pivot.wtk">
-  <Border>
-    <GridPane columnCount="12"
-              styles="{horizontalSpacing:1, verticalSpacing:1,
-                      showHorizontalGridLines:true, showVerticalGridLines:true}"
-              bxml:id="gridpane">
-      <GridPane.Row>
-        <PushButton/>
-        <PushButton/>
-        <PushButton/>
-        <PushButton/>
-        <PushButton/>
-        <PushButton/>
-        <PushButton/>
-        <PushButton/>
-        <PushButton/>
-        <PushButton/>
-        <PushButton/>
-        <PushButton/>
-      </GridPane.Row>
-      <GridPane.Row>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-      </GridPane.Row>
-      <GridPane.Row>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-      </GridPane.Row>
-      <GridPane.Row>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-      </GridPane.Row>
-      <GridPane.Row>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-      </GridPane.Row>
-      <GridPane.Row>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-      </GridPane.Row>
-      <GridPane.Row>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-        <ImageView/>
-      </GridPane.Row>
-    </GridPane>
+  <Border styles="{color:'#0000ff', titleColor:'#000000', padding:2}">
+    <TablePane>
+      <columns>
+        <TablePane.Column width="640"/>
+        <TablePane.Column width="200"/>
+      </columns>
+
+      <TablePane.Row>
+        <GridPane columnCount="16"
+                  styles="{horizontalSpacing:1, verticalSpacing:1,
+                          showHorizontalGridLines:false, showVerticalGridLines:true}"
+                  bxml:id="rack">
+          <GridPane.Row>
+            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
+            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
+            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
+            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
+          </GridPane.Row>
+        </GridPane>
+        <BoxPane orientation="vertical">
+          <BoxPane>
+            <Label text="Rack:"/>
+            <TextInput enabled="false" bxml:id="rackscore"/>
+          </BoxPane>
+          <BoxPane>
+            <Label text="Score:"/>
+            <TextInput enabled="false" bxml:id="score"/>
+          </BoxPane>
+        </BoxPane>
+      </TablePane.Row>
+
+      <TablePane.Row height="25">
+        <Panel>
+        </Panel>
+      </TablePane.Row>
+
+      <TablePane.Row height="480">
+        <GridPane columnCount="16"
+                  styles="{horizontalSpacing:1, verticalSpacing:1, showHorizontalGridLines:true, showVerticalGridLines:true}"
+                  bxml:id="board">
+          <GridPane.Row>
+            <PushButton/> <PushButton/> <PushButton/> <PushButton/>
+            <PushButton/> <PushButton/> <PushButton/> <PushButton/>
+            <PushButton/> <PushButton/> <PushButton/> <PushButton/>
+            <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/>
+          </GridPane.Row>
+          <GridPane.Row>
+            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
+            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
+            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
+            <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/>
+          </GridPane.Row>
+          <GridPane.Row>
+            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
+            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
+            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
+            <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/>
+          </GridPane.Row>
+          <GridPane.Row>
+            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
+            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
+            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
+            <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/>
+          </GridPane.Row>
+          <GridPane.Row>
+            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
+            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
+            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
+            <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/>
+          </GridPane.Row>
+          <GridPane.Row>
+            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
+            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
+            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
+            <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/>
+          </GridPane.Row>
+          <GridPane.Row>
+            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
+            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
+            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
+            <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/>
+          </GridPane.Row>
+        </GridPane>
+        <BoxPane orientation="vertical">
+          <BoxPane orientation="vertical" styles="{padding:4, horizontalAlignment:'left', verticalAlignment:'top'}">
+            <PushButton bxml:id="btnScore" buttonData="Score Rack"/>
+            <PushButton bxml:id="btnUndo" buttonData="Undo Move"/>
+          </BoxPane>
+          <BoxPane orientation="vertical" styles="{padding:4, horizontalAlignment:'left', verticalAlignment:'top'}">
+            <PushButton bxml:id="btnReset" buttonData="Reset Game"/>
+          </BoxPane>
+        </BoxPane>
+      </TablePane.Row>
+    </TablePane>
   </Border>
 </Window>
