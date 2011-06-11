@@ -10,7 +10,7 @@
   :dev-dependencies [[swank-clojure "1.4.0-SNAPSHOT"]
                      [clojure-source "1.2.0"]]
   :jar-name "wordwhiz.jar"
-  :warn-on-reflection true
+  :warn-on-reflection false
   :main wordwhiz.clj.ui
   :aot [wordwhiz.clj.core
         wordwhiz.clj.ui])
