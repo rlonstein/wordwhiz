@@ -1,22 +1,35 @@
 <Window title="Wordwhiz" maximized="true"
-        xmlns:bxml="http://pivot.apache.org/bxml" xmlns="org.apache.pivot.wtk">
+        xmlns:bxml="http://pivot.apache.org/bxml"
+        xmlns="org.apache.pivot.wtk">
   <Border styles="{color:'#0000ff', titleColor:'#000000', padding:2}">
     <TablePane>
       <columns>
         <TablePane.Column width="640"/>
         <TablePane.Column width="200"/>
       </columns>
-
+      
       <TablePane.Row>
         <GridPane columnCount="16"
                   styles="{horizontalSpacing:1, verticalSpacing:1,
                           showHorizontalGridLines:false, showVerticalGridLines:true}"
-                  bxml:id="rack">
-          <GridPane.Row>
-            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
-            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
-            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
-            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
+                  bxml:id="rack-pane">
+          <GridPane.Row bxml:id="rack">
+            <ImageView bxml:id="rack,0" />
+            <ImageView bxml:id="rack,1" />
+            <ImageView bxml:id="rack,2" />
+            <ImageView bxml:id="rack,3" />
+            <ImageView bxml:id="rack,4" />
+            <ImageView bxml:id="rack,5" />
+            <ImageView bxml:id="rack,6" />
+            <ImageView bxml:id="rack,7" />
+            <ImageView bxml:id="rack,8" />
+            <ImageView bxml:id="rack,9" />
+            <ImageView bxml:id="rack,10" />
+            <ImageView bxml:id="rack,11" />
+            <ImageView bxml:id="rack,12" />
+            <ImageView bxml:id="rack,13" />
+            <ImageView bxml:id="rack,14" />
+            <ImageView bxml:id="rack,15" />
           </GridPane.Row>
         </GridPane>
         <BoxPane orientation="vertical">
@@ -40,10 +53,19 @@
         <GridPane columnCount="16"
                   styles="{horizontalSpacing:1, verticalSpacing:1, showHorizontalGridLines:true, showVerticalGridLines:true}"
                   bxml:id="board">
-          <GridPane.Row>
-            <PushButton/> <PushButton/> <PushButton/> <PushButton/>
-            <PushButton/> <PushButton/> <PushButton/> <PushButton/>
-            <PushButton/> <PushButton/> <PushButton/> <PushButton/>
+          <GridPane.Row bxml:id="row,0">
+            <BoardButton bxml:id="0,0"  xmlns="wordwhiz.clj.ui" />
+            <BoardButton bxml:id="0,1"  xmlns="wordwhiz.clj.ui" />
+            <BoardButton bxml:id="0,2"  xmlns="wordwhiz.clj.ui" />
+            <BoardButton bxml:id="0,3"  xmlns="wordwhiz.clj.ui" />
+            <BoardButton bxml:id="0,4"  xmlns="wordwhiz.clj.ui" />
+            <BoardButton bxml:id="0,5"  xmlns="wordwhiz.clj.ui" />
+            <BoardButton bxml:id="0,6"  xmlns="wordwhiz.clj.ui" />
+            <BoardButton bxml:id="0,7"  xmlns="wordwhiz.clj.ui" />
+            <BoardButton bxml:id="0,8"  xmlns="wordwhiz.clj.ui" />
+            <BoardButton bxml:id="0,9"  xmlns="wordwhiz.clj.ui" />
+            <BoardButton bxml:id="0,10" xmlns="wordwhiz.clj.ui" />
+            <BoardButton bxml:id="0,11" xmlns="wordwhiz.clj.ui" />
             <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/>
           </GridPane.Row>
           <GridPane.Row>
@@ -85,11 +107,14 @@
         </GridPane>
         <BoxPane orientation="vertical">
           <BoxPane orientation="vertical" styles="{padding:4, horizontalAlignment:'left', verticalAlignment:'top'}">
-            <PushButton bxml:id="btnScore" buttonData="Score Rack"/>
-            <PushButton bxml:id="btnUndo" buttonData="Undo Move"/>
+            <ActionButton bxml:id="btnScore" buttonData="Score Rack" xmlns="wordwhiz.clj.ui" />
+            <ActionButton bxml:id="btnUndo" buttonData="Undo Move" xmlns="wordwhiz.clj.ui" />
           </BoxPane>
           <BoxPane orientation="vertical" styles="{padding:4, horizontalAlignment:'left', verticalAlignment:'top'}">
-            <PushButton bxml:id="btnReset" buttonData="Reset Game"/>
+            <ActionButton bxml:id="btnReset" buttonData="Reset Game" xmlns="wordwhiz.clj.ui" />
+          </BoxPane>
+          <BoxPane orientation="vertical" styles="{padding:4, horizontalAlignment:'left', verticalAlignment:'top'}">
+            <ActionButton bxml:id="btnQuit" buttonData="Quit" xmlns="wordwhiz.clj.ui" />
           </BoxPane>
         </BoxPane>
       </TablePane.Row>
