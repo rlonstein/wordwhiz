@@ -1,7 +1,7 @@
 <Window title="Wordwhiz" maximized="true"
         xmlns:bxml="http://pivot.apache.org/bxml"
         xmlns="org.apache.pivot.wtk">
-  <Border styles="{color:'#0000ff', titleColor:'#000000', padding:2}">
+  <Border>
     <TablePane>
       <columns>
         <TablePane.Column width="640"/>
@@ -50,9 +50,7 @@
       </TablePane.Row>
 
       <TablePane.Row height="480">
-        <GridPane columnCount="16"
-                  styles="{horizontalSpacing:1, verticalSpacing:1, showHorizontalGridLines:true, showVerticalGridLines:true}"
-                  bxml:id="board">
+        <GridPane columnCount="16" bxml:id="board">
           <GridPane.Row bxml:id="row,0">
             <BoardButton bxml:id="0,0"  xmlns="wordwhiz.clj.ui" />
             <BoardButton bxml:id="0,1"  xmlns="wordwhiz.clj.ui" />
@@ -69,39 +67,93 @@
             <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/>
           </GridPane.Row>
           <GridPane.Row>
-            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
-            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
-            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
+            <ImageView />
+            <ImageView />
+            <ImageView image="@image/tiles/tile-w.png" />
+            <ImageView image="@image/tiles/tile-o.png" />
+            <ImageView image="@image/tiles/tile-r.png" />
+            <ImageView image="@image/tiles/tile-d.png" />
+            <ImageView image="@image/tiles/tile-w.png" />
+            <ImageView image="@image/tiles/tile-h.png" />
+            <ImageView image="@image/tiles/tile-i.png" />
+            <ImageView image="@image/tiles/tile-z.png" />
+            <ImageView />
+            <ImageView />
             <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/>
           </GridPane.Row>
           <GridPane.Row>
-            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
-            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
-            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
+            <ImageView />
+            <ImageView />
+            <ImageView />
+            <ImageView />
+            <ImageView />
+            <ImageView />
+            <ImageView />
+            <ImageView />
+            <ImageView />
+            <ImageView />
+            <ImageView />
+            <ImageView />
             <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/>
           </GridPane.Row>
           <GridPane.Row>
-            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
-            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
-            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
+            <ImageView />
+            <ImageView />
+            <ImageView />
+            <ImageView image="@image/tiles/tile-l.png" />
+            <ImageView image="@image/tiles/tile-e.png" />
+            <ImageView image="@image/tiles/tile-t.png" />
+            <ImageView image="@image/tiles/tile-t.png" />
+            <ImageView image="@image/tiles/tile-e.png" />
+            <ImageView image="@image/tiles/tile-r.png" />
+            <ImageView />
+            <ImageView />
+            <ImageView />
             <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/>
           </GridPane.Row>
           <GridPane.Row>
-            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
-            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
-            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
+            <ImageView />
+            <ImageView image="@image/tiles/tile-t.png" />
+            <ImageView image="@image/tiles/tile-i.png" />
+            <ImageView image="@image/tiles/tile-l.png" />
+            <ImageView image="@image/tiles/tile-e.png" />
+            <ImageView />
+            <ImageView image="@image/tiles/tile-g.png" />
+            <ImageView image="@image/tiles/tile-a.png" />
+            <ImageView image="@image/tiles/tile-m.png" />
+            <ImageView image="@image/tiles/tile-e.png" />
+            <ImageView />
+            <ImageView />
             <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/>
           </GridPane.Row>
           <GridPane.Row>
-            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
-            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
-            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
+            <ImageView />
+            <ImageView />
+            <ImageView />
+            <ImageView />
+            <ImageView />
+            <ImageView />
+            <ImageView />
+            <ImageView />
+            <ImageView />
+            <ImageView />
+            <ImageView />
+            <ImageView />
             <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/>
           </GridPane.Row>
           <GridPane.Row>
-            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
-            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
-            <ImageView/> <ImageView/> <ImageView/> <ImageView/>
+            <ImageView />
+            <ImageView image="@image/tiles/tile-r.png" />
+            <ImageView />
+            <ImageView image="@image/tiles/tile-l.png" />
+            <ImageView image="@image/tiles/tile-o.png" />
+            <ImageView image="@image/tiles/tile-n.png" />
+            <ImageView image="@image/tiles/tile-s.png" />
+            <ImageView image="@image/tiles/tile-t.png" />
+            <ImageView image="@image/tiles/tile-e.png" />
+            <ImageView image="@image/tiles/tile-i.png" />
+            <ImageView image="@image/tiles/tile-n.png" />
+            <ImageView />
             <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/>
           </GridPane.Row>
         </GridPane>
@@ -112,6 +164,7 @@
           </BoxPane>
           <BoxPane orientation="vertical" styles="{padding:4, horizontalAlignment:'left', verticalAlignment:'top'}">
             <ActionButton bxml:id="btnReset" buttonData="Reset Game" xmlns="wordwhiz.clj.ui" />
+            <ActionButton bxml:id="btnNew" buttonData="New Game" xmlns="wordwhiz.clj.ui" />
           </BoxPane>
           <BoxPane orientation="vertical" styles="{padding:4, horizontalAlignment:'left', verticalAlignment:'top'}">
             <ActionButton bxml:id="btnQuit" buttonData="Quit" xmlns="wordwhiz.clj.ui" />

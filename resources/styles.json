@@ -1,0 +1,22 @@
+/*
+ * global (window) style sheet
+ */
+
+{
+    Border: {
+        color: "#0000ff",
+        titleColor: "#000000",
+        padding: 2
+    },
+
+    ImageView: {
+        backgroundColor: "#CCCCCC"
+    },
+
+    GridPane: {
+        horizontalSpacing: 1,
+        verticalSpacing: 1,
+        showHorizontalGridLines: false,
+        showVerticalGridLines: false
+    },   
+}

@@ -29,6 +29,7 @@
                          Window)))
 
 (def uidescfile (. ClassLoader getSystemResource "ui.bxml"))
+(def uistylesheet "@styles.json")
  
 (gen-class
  :name wordwhiz.clj.ui
@@ -38,6 +39,7 @@
 
 (defn -main [& args]
   "Entry point for application-style (desktop) execution"
+  (. DesktopApplicationContext applyStylesheet uistylesheet)
   (. DesktopApplicationContext main (. (ClassLoader/getSystemClassLoader) loadClass "wordwhiz.clj.ui") (into-array String args)))
 
 (defn -startup [this display props]
