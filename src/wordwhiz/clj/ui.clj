@@ -30,7 +30,14 @@
 
 (def uidescfile (. ClassLoader getSystemResource "ui.bxml"))
 (def uistylesheet "@styles.json")
- 
+
+
+(defn attach-button-listener [btn f]
+  (.. btn
+      (getButtonPressListeners)
+      (add (proxy [ButtonPressListener] []
+             (buttonPressed [b] (f b))))))
+
 (gen-class
  :name wordwhiz.clj.ui
  :implements [org.apache.pivot.wtk.Application]
@@ -59,16 +66,18 @@
  :name wordwhiz.clj.ui.BoardButton
  :extends org.apache.pivot.wtk.PushButton
  :post-init attach-listener
- :prefix btn-)
+ :prefix bbtn-)
 
 (gen-class
  :name wordwhiz.clj.ui.ActionButton
  :extends org.apache.pivot.wtk.PushButton
  :post-init attach-listener
- :prefix btn-)
+ :prefix abtn-)
 
-(defn btn-attach-listener [btn]
-  (.. btn
-      (getButtonPressListeners)
-      (add (proxy [ButtonPressListener] []
-             (buttonPressed [b] (println "Hello from",b,(. b getName)))))))
+(defn bbtn-attach-listener [btn]
+  (attach-button-listener btn (fn [b]
+                                (println "I'm board button", (. b getName)))))
+
+(defn abtn-attach-listener [btn]
+  (attach-button-listener btn (fn [b]
+                                (println "I'm action button", (. b getName)))))
