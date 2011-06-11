@@ -48,7 +48,7 @@
   )    ;; Scrabble(tm) also (\SPACE 0 2)
 
 
-(defstruct game-state :tiles :history :score :board :rack :dictionary)
+(defstruct game-state :tiles :history :score :board :rack :dictionary :playing)
 
 (defn read-dict [fn]
   "Read a wordlist from a file, returning the newly created set"
@@ -123,6 +123,7 @@ on tile distribution and word length"
                     :score 0
                     :board nil
                     :rack nil
+                    :playing true
                     :dictionary (read-dict dictfile)})
 
 (defn new-game []
