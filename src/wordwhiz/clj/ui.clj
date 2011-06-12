@@ -69,15 +69,56 @@
  :prefix bbtn-)
 
 (gen-class
- :name wordwhiz.clj.ui.ActionButton
+ :name wordwhiz.clj.ui.ScoreButton
  :extends org.apache.pivot.wtk.PushButton
  :post-init attach-listener
- :prefix abtn-)
+ :prefix score-)
+
+(gen-class
+ :name wordwhiz.clj.ui.UndoButton
+ :extends org.apache.pivot.wtk.PushButton
+ :post-init attach-listener
+ :prefix undo-)
+
+(gen-class
+ :name wordwhiz.clj.ui.ResetButton
+ :extends org.apache.pivot.wtk.PushButton
+ :post-init attach-listener
+ :prefix reset-)
+
+(gen-class
+ :name wordwhiz.clj.ui.NewGameButton
+ :extends org.apache.pivot.wtk.PushButton
+ :post-init attach-listener
+ :prefix newgame-)
+
+(gen-class
+ :name wordwhiz.clj.ui.QuitButton
+ :extends org.apache.pivot.wtk.PushButton
+ :post-init attach-listener
+ :prefix quit-)
 
 (defn bbtn-attach-listener [btn]
   (attach-button-listener btn (fn [b]
                                 (println "I'm board button", (. b getName)))))
 
-(defn abtn-attach-listener [btn]
+(defn reset-attach-listener [btn]
   (attach-button-listener btn (fn [b]
-                                (println "I'm action button", (. b getName)))))
+                                (println "reset button"))))
+
+(defn score-attach-listener [btn]
+  (attach-button-listener btn (fn [b]
+                                (println "score button"))))
+
+(defn undo-attach-listener [btn]
+  (attach-button-listener btn (fn [b]
+                                (println "undo button"))))
+
+(defn newgame-attach-listener [btn]
+  (attach-button-listener btn (fn [b]
+                                (println "newgame button"))))
+
+(defn quit-attach-listener [btn]
+  (attach-button-listener btn (fn [b]
+                                (println "quit button"))))
+
