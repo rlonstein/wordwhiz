@@ -9,6 +9,11 @@
         padding: 2
     },
 
+    TablePane: {
+        verticalSpacing: 1,
+        horizontalSpacing: 1
+    },
+
     ImageView: {
         backgroundColor: "#CCCCCC"
     },
@@ -18,5 +23,10 @@
         verticalSpacing: 1,
         showHorizontalGridLines: false,
         showVerticalGridLines: false
-    },   
+    },
+
+    BoxPane: {
+        padding: 10,
+        spacing: 4
+    }
 }
