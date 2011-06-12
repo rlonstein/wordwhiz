@@ -1,5 +1,6 @@
 <Window title="Wordwhiz" maximized="true"
         xmlns:bxml="http://pivot.apache.org/bxml"
+        xmlns:content="org.apache.pivot.wtk.content"
         xmlns="org.apache.pivot.wtk">
   <Border>
     <TablePane>
@@ -158,16 +159,26 @@
           </GridPane.Row>
         </GridPane>
         <BoxPane orientation="vertical">
-          <BoxPane orientation="vertical" styles="{padding:4, horizontalAlignment:'left', verticalAlignment:'top'}">
-            <ActionButton bxml:id="btnScore" buttonData="Score Rack" xmlns="wordwhiz.clj.ui" />
-            <ActionButton bxml:id="btnUndo" buttonData="Undo Move" xmlns="wordwhiz.clj.ui" />
+          <BoxPane orientation="vertical" styles="{padding:4, horizontalAlignment:'left', verticalAlignment:'top', fill:'true'}">
+            <ScoreButton xmlns="wordwhiz.clj.ui">
+              <content:ButtonData text="Score rack" icon="@image/icons/accept.png" />
+            </ScoreButton>
+            <UndoButton xmlns="wordwhiz.clj.ui">
+              <content:ButtonData text="Undo move" icon="@image/icons/arrow_undo.png" />
+            </UndoButton>
           </BoxPane>
-          <BoxPane orientation="vertical" styles="{padding:4, horizontalAlignment:'left', verticalAlignment:'top'}">
-            <ActionButton bxml:id="btnReset" buttonData="Reset Game" xmlns="wordwhiz.clj.ui" />
-            <ActionButton bxml:id="btnNew" buttonData="New Game" xmlns="wordwhiz.clj.ui" />
+          <BoxPane orientation="vertical" styles="{padding:4, horizontalAlignment:'left', verticalAlignment:'top', fill:'true'}">
+            <ResetButton xmlns="wordwhiz.clj.ui">
+              <content:ButtonData text="Restart game" icon="@image/icons/cancel.png" />
+            </ResetButton>
+            <NewGameButton xmlns="wordwhiz.clj.ui">
+              <content:ButtonData text="New game    " icon="@image/icons/cross.png" />
+            </NewGameButton>
           </BoxPane>
-          <BoxPane orientation="vertical" styles="{padding:4, horizontalAlignment:'left', verticalAlignment:'top'}">
-            <ActionButton bxml:id="btnQuit" buttonData="Quit" xmlns="wordwhiz.clj.ui" />
+          <BoxPane orientation="vertical" styles="{padding:4, horizontalAlignment:'left', verticalAlignment:'top', fill:'true'}">
+            <QuitButton xmlns="wordwhiz.clj.ui">
+              <content:ButtonData text="Quit" icon="@image/icons/stop.png" />
+            </QuitButton>
           </BoxPane>
         </BoxPane>
       </TablePane.Row>
