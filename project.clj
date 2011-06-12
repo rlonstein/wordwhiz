@@ -6,7 +6,8 @@
                  [org.clojure/clojure-contrib "1.2.0"]
                  [org.apache.pivot/pivot-core "2.0"]
                  [org.apache.pivot/pivot-wtk "2.0"]
-                 [org.apache.pivot/pivot-wtk-terra "2.0"]]
+                 [org.apache.pivot/pivot-wtk-terra "2.0"]
+                 [jflac/jflac-codec "1.4.0-SNAPSHOT"]]
   :dev-dependencies [[swank-clojure "1.4.0-SNAPSHOT"]
                      [clojure-source "1.2.0"]]
   :jar-name "wordwhiz.jar"
