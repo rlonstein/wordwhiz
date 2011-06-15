@@ -14,6 +14,9 @@
                                 Clip
                                 DataLine
                                 DataLine$Info
+                                LineEvent
+                                LineEvent$Type
+                                LineListener
                                 LineUnavailableException)
            (org.kc7bfi.jflac FLACDecoder)))
 
@@ -36,15 +39,30 @@
 (defn coerce-stream-to-pcm [audio-stream]
   (if-not (is-pcm? audio-stream) (stream-to-pcm audio-stream) audio-stream))
 
-(defn get-audio-input-stream [fn]
-  (coerce-stream-to-pcm (AudioSystem/getAudioInputStream (File. fn))))
+(defn get-audio-input-stream [filename]
+  (coerce-stream-to-pcm (AudioSystem/getAudioInputStream (File. filename))))
 
-(defn play-sound [fn]
+(defn listener-event-types []
+  "Return mapping of event names to underlying implementation types"
+  {
+   :start (LineEvent$Type/START)
+   :stop  (LineEvent$Type/STOP)
+   :open  (LineEvent$Type/OPEN)
+   :close (LineEvent$Type/CLOSE)
+   }
+  )
+
+(defn play-sound [filename & [listener-fn event-type]]
   (let [
-        stream (get-audio-input-stream fn)
+        stream (get-audio-input-stream filename)
         format (. stream getFormat)
         info (DataLine$Info. Clip format)
         #^Clip clip (AudioSystem/getLine info)
         ]
+    (if-not (nil? listener-fn)
+      (. clip addLineListener (proxy [LineListener] []
+                                (update [event]
+                                  (if (= (. event getType) event-type)
+                                    (listener-fn event))))))
     (.open clip stream)
     (.start clip)))
