@@ -18,3 +18,4 @@ Java 1.6 or later
  * [Cheer.wav](http://www.freesound.org/samplesViewSingle.php?id=22952) by acclivity
  * [Mechanical2.wav](http://www.freesound.org/samplesViewSingle.php?id=94121) by BMacZero
  * [toilet flush.wav](http://www.freesound.org/samplesViewSingle.php?id=20736) by megamart
+ * [whoosh.wav](http://www.freesound.org/samplesViewSingle.php?id=9257) by burnttoys
