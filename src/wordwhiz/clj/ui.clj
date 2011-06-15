@@ -6,6 +6,8 @@
 ;;;
 
 (ns wordwhiz.clj.ui
+  (:require wordwhiz.clj.core
+            wordwhiz.clj.audio)
   (:import
    (java.net URL)
    (org.apache.pivot)
@@ -38,6 +40,9 @@
       (add (proxy [ButtonPressListener] []
              (buttonPressed [b] (f b))))))
 
+(defn get-resource-fn [res]
+  (.. (Thread/currentThread) (getContextClassLoader) (getResource res) (getFile)))
+
 (gen-class
  :name wordwhiz.clj.ui
  :implements [org.apache.pivot.wtk.Application]
@@ -50,7 +55,7 @@
   (. DesktopApplicationContext main (. (ClassLoader/getSystemClassLoader) loadClass "wordwhiz.clj.ui") (into-array String args)))
 
 (defn -startup [this display props]
-   (. (. (org.apache.pivot.beans.BXMLSerializer.) readObject uidescfile) open display))
+  (. (. (org.apache.pivot.beans.BXMLSerializer.) readObject uidescfile) open display))
 
 (defn -resume [this])
 
@@ -100,25 +105,31 @@
 
 (defn bbtn-attach-listener [btn]
   (attach-button-listener btn (fn [b]
+                                (wordwhiz.clj.audio/play-sound (get-resource-fn "audio/twig_snap.flac"))
                                 (println "I'm board button", (. b getName)))))
 
 (defn reset-attach-listener [btn]
   (attach-button-listener btn (fn [b]
+                                (wordwhiz.clj.audio/play-sound (get-resource-fn "audio/whoosh.flac"))
                                 (println "reset button"))))
 
 (defn score-attach-listener [btn]
   (attach-button-listener btn (fn [b]
+                                (wordwhiz.clj.audio/play-sound (get-resource-fn "audio/mechanical2.flac"))
                                 (println "score button"))))
 
 (defn undo-attach-listener [btn]
   (attach-button-listener btn (fn [b]
+                                (wordwhiz.clj.audio/play-sound (get-resource-fn "audio/mechanical2.flac"))
                                 (println "undo button"))))
 
 (defn newgame-attach-listener [btn]
   (attach-button-listener btn (fn [b]
+                                (wordwhiz.clj.audio/play-sound (get-resource-fn "audio/toilet_flush.flac"))
                                 (println "newgame button"))))
 
 (defn quit-attach-listener [btn]
   (attach-button-listener btn (fn [b]
+                                (wordwhiz.clj.audio/play-sound (get-resource-fn "audio/vicki-bye.au"))
                                 (println "quit button"))))
 
