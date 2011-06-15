@@ -52,7 +52,7 @@
 (defn -main [& args]
   "Entry point for application-style (desktop) execution"
   (. DesktopApplicationContext applyStylesheet uistylesheet)
-  (. DesktopApplicationContext main (. (ClassLoader/getSystemClassLoader) loadClass "wordwhiz.clj.ui") (into-array String args)))
+  (. DesktopApplicationContext main wordwhiz.clj.ui (into-array String args)))
 
 (defn -startup [this display props]
   (. (. (org.apache.pivot.beans.BXMLSerializer.) readObject uidescfile) open display))

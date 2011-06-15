@@ -1,3 +1,10 @@
+;;;
+;;; Wordwhiz -- A letter tile game
+;;;
+;;; Copyright (c) R. Lonstein
+;;; Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
+;;;
+
 (ns wordwhiz.clj.audio
   (:import (java.io File)
            (javax.sound.sampled AudioFormat
