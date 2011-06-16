@@ -101,20 +101,11 @@ on tile distribution and word length"
   ;;FIXME
   )
 
-(defn ui-rack-tile [col game]
-  ;;FIXME
-  )
-
-(defn ui-update-board [game]
-  ;;FIXME
-  )
+(defn reset-game [game]
+  (merge game {:rack nil :history nil :score 0 :board (fill-board (:tiles game))}))
 
 (defn undo-move [game]
   "Rewind actions from the game history"
-  ;;FIXME
-  )
-
-(defn ui-undo-move [game]
   ;;FIXME
   )
 
