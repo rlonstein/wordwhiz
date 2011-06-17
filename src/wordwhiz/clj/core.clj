@@ -64,7 +64,7 @@
     (for [ letter (keys tile-distr) ] (replicate (:frequency (get tile-distr letter)) letter)))))
 
 (defn fill-board [tiles]
-  "Produce a game board as a vector of vectors from the supplied collection"
+  "Produce a game board as a list of vectors from the supplied collection"
   (for [x (range 0 (:x board-dim))]
     (let [ start (* (:y board-dim) x) end (+ start (:y board-dim))]
       (subvec tiles start end))))
@@ -101,6 +101,10 @@ on tile distribution and word length"
   ;;FIXME
   )
 
+(defn tile-at [board x y]
+  "Return the tile (letter) at given coordinates"
+  (get (nth board x) y))
+
 (defn reset-game [game]
   (merge game {:rack nil :history nil :score 0 :board (fill-board (:tiles game))}))
 
@@ -113,6 +117,7 @@ on tile distribution and word length"
                     :history nil
                     :score 0
                     :board nil
+                    :board-dim board-dim
                     :rack nil
                     :playing true
                     :dictionary (read-dict dictfile)})
