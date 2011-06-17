@@ -64,8 +64,8 @@
             <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/>
           </GridPane.Row>
           <GridPane.Row>
-            <ImageView />
-            <ImageView />
+            <ImageView image="@image/tiles/tile-space.png"/>
+            <ImageView image="@image/tiles/tile-space.png"/>
             <ImageView image="@image/tiles/tile-w.png" />
             <ImageView image="@image/tiles/tile-o.png" />
             <ImageView image="@image/tiles/tile-r.png" />
@@ -74,74 +74,74 @@
             <ImageView image="@image/tiles/tile-h.png" />
             <ImageView image="@image/tiles/tile-i.png" />
             <ImageView image="@image/tiles/tile-z.png" />
-            <ImageView />
-            <ImageView />
+            <ImageView image="@image/tiles/tile-space.png"/>
+            <ImageView image="@image/tiles/tile-space.png"/>
             <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/>
           </GridPane.Row>
           <GridPane.Row>
-            <ImageView />
-            <ImageView />
-            <ImageView />
-            <ImageView />
-            <ImageView />
-            <ImageView />
-            <ImageView />
-            <ImageView />
-            <ImageView />
-            <ImageView />
-            <ImageView />
-            <ImageView />
+            <ImageView image="@image/tiles/tile-space.png"/>
+            <ImageView image="@image/tiles/tile-space.png"/>
+            <ImageView image="@image/tiles/tile-space.png"/>
+            <ImageView image="@image/tiles/tile-space.png"/>
+            <ImageView image="@image/tiles/tile-space.png"/>
+            <ImageView image="@image/tiles/tile-space.png"/>
+            <ImageView image="@image/tiles/tile-space.png"/>
+            <ImageView image="@image/tiles/tile-space.png"/>
+            <ImageView image="@image/tiles/tile-space.png"/>
+            <ImageView image="@image/tiles/tile-space.png"/>
+            <ImageView image="@image/tiles/tile-space.png"/>
+            <ImageView image="@image/tiles/tile-space.png"/>
             <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/>
           </GridPane.Row>
           <GridPane.Row>
-            <ImageView />
-            <ImageView />
-            <ImageView />
+            <ImageView image="@image/tiles/tile-space.png"/>
+            <ImageView image="@image/tiles/tile-space.png"/>
+            <ImageView image="@image/tiles/tile-space.png"/>
             <ImageView image="@image/tiles/tile-l.png" />
             <ImageView image="@image/tiles/tile-e.png" />
             <ImageView image="@image/tiles/tile-t.png" />
             <ImageView image="@image/tiles/tile-t.png" />
             <ImageView image="@image/tiles/tile-e.png" />
             <ImageView image="@image/tiles/tile-r.png" />
-            <ImageView />
-            <ImageView />
-            <ImageView />
+            <ImageView image="@image/tiles/tile-space.png"/>
+            <ImageView image="@image/tiles/tile-space.png"/>
+            <ImageView image="@image/tiles/tile-space.png"/>
             <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/>
           </GridPane.Row>
           <GridPane.Row>
-            <ImageView />
+            <ImageView image="@image/tiles/tile-space.png"/>
             <ImageView image="@image/tiles/tile-t.png" />
             <ImageView image="@image/tiles/tile-i.png" />
             <ImageView image="@image/tiles/tile-l.png" />
             <ImageView image="@image/tiles/tile-e.png" />
-            <ImageView />
+            <ImageView image="@image/tiles/tile-space.png"/>
             <ImageView image="@image/tiles/tile-g.png" />
             <ImageView image="@image/tiles/tile-a.png" />
             <ImageView image="@image/tiles/tile-m.png" />
             <ImageView image="@image/tiles/tile-e.png" />
-            <ImageView />
-            <ImageView />
+            <ImageView image="@image/tiles/tile-space.png"/>
+            <ImageView image="@image/tiles/tile-space.png"/>
             <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/>
           </GridPane.Row>
           <GridPane.Row>
-            <ImageView />
-            <ImageView />
-            <ImageView />
-            <ImageView />
-            <ImageView />
-            <ImageView />
-            <ImageView />
-            <ImageView />
-            <ImageView />
-            <ImageView />
-            <ImageView />
-            <ImageView />
+            <ImageView image="@image/tiles/tile-space.png"/>
+            <ImageView image="@image/tiles/tile-space.png"/>
+            <ImageView image="@image/tiles/tile-space.png"/>
+            <ImageView image="@image/tiles/tile-space.png"/>
+            <ImageView image="@image/tiles/tile-space.png"/>
+            <ImageView image="@image/tiles/tile-space.png"/>
+            <ImageView image="@image/tiles/tile-space.png"/>
+            <ImageView image="@image/tiles/tile-space.png"/>
+            <ImageView image="@image/tiles/tile-space.png"/>
+            <ImageView image="@image/tiles/tile-space.png"/>
+            <ImageView image="@image/tiles/tile-space.png"/>
+            <ImageView image="@image/tiles/tile-space.png"/>
             <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/>
           </GridPane.Row>
           <GridPane.Row>
-            <ImageView />
+            <ImageView image="@image/tiles/tile-space.png"/>
             <ImageView image="@image/tiles/tile-r.png" />
-            <ImageView />
+            <ImageView image="@image/tiles/tile-space.png"/>
             <ImageView image="@image/tiles/tile-l.png" />
             <ImageView image="@image/tiles/tile-o.png" />
             <ImageView image="@image/tiles/tile-n.png" />
@@ -150,7 +150,7 @@
             <ImageView image="@image/tiles/tile-e.png" />
             <ImageView image="@image/tiles/tile-i.png" />
             <ImageView image="@image/tiles/tile-n.png" />
-            <ImageView />
+            <ImageView image="@image/tiles/tile-space.png"/>
             <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/> <GridPane.Filler/>
           </GridPane.Row>
         </GridPane>
