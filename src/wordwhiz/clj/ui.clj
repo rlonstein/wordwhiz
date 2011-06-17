@@ -27,12 +27,14 @@
                          DesktopApplicationContext
                          Frame
                          MessageType
+                         Prompt
                          PushButton
-                         Window)))
+                         Window)
+   (org.apache.pivot.wtk.media Image)))
 
 (def uidescfile (. ClassLoader getSystemResource "ui.bxml"))
 (def uistylesheet "@styles.json")
-
+(def state (ref {:game {}}))
 
 (defn attach-button-listener [btn f]
   (.. btn
@@ -40,13 +42,32 @@
       (add (proxy [ButtonPressListener] []
              (buttonPressed [b] (f b))))))
 
+(defn get-resource [res]
+  (.. (Thread/currentThread) (getContextClassLoader) (getResource res)))
+
 (defn get-resource-fn [res]
-  (.. (Thread/currentThread) (getContextClassLoader) (getResource res) (getFile)))
+  (.. (get-resource res) (getFile)))
+
+(defn get-image [res]
+  (. (Image.) load (get-resource res)))
+
+(defn update-widgit-image [widgit name]
+  (let [ widgit-class (class widgit) ]
+    (cond (isa? widgit-class org.apache.pivot.wtk.Button) (.. widgit (setIcon) (get-image name))
+          (isa? widgit-class org.apache.pivot.wtk.ImageView) (.. widgit (setImage) (get-image name)))))
+
+(defn get-widgit-at [container x y]
+  (. container getNamedComponent (str x "," y)))
+
+(defn update-board [game container]
+  (doseq [row (range 0 (:y (:board-dim game)))
+          col (range 0 (:x (:board-dim game)))]
+    (update-widgit-image (get-widgit-at row col) (wordwhiz.clj.core/tile-at (:board game) row col))))
+
 
 (gen-class
  :name wordwhiz.clj.ui
  :implements [org.apache.pivot.wtk.Application]
- :state state
  :init init)
 
 (defn -main [& args]
@@ -130,6 +151,7 @@
 
 (defn quit-attach-listener [btn]
   (attach-button-listener btn (fn [b]
-                                (wordwhiz.clj.audio/play-sound (get-resource-fn "audio/vicki-bye.au"))
-                                (println "quit button"))))
+                                (wordwhiz.clj.audio/play-sound
+                                 (get-resource-fn "audio/vicki-bye.au")
+                                 (fn [e] (java.lang.System/exit 0))))))
 
