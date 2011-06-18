@@ -124,12 +124,3 @@ on tile distribution and word length"
   "Return a new populated game state"
   (let [g (merge (struct game-state) game-defaults {:tiles (tileset)})]
     (merge g {:board (fill-board (:tiles g))})))
-
-
-;; (defn -main [& args]
-;;   ;;FIXME: do something useful here
-;;   (printf "Dictionary %s\n" dictfile)
-;;   (let [ g (new-game)]
-;;     (printf "Have %d words in game dictionary\n" (count (:dictionary g) ))
-;;     (println "FIXME: implement something useful here...")))
-
