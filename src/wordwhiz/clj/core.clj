@@ -6,9 +6,7 @@
 ;;;
 
 (ns wordwhiz.clj.core
-  (:require (clojure.contrib)
-            (clojure.java.io)
-            (clojure.contrib.seq-utils)
+  (:require (clojure.java.io)
             [clojure.string :as str])
   (:import (java.util HashSet)))
 
