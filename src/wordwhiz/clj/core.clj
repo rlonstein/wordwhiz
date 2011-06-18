@@ -7,42 +7,40 @@
 
 (ns wordwhiz.clj.core
   (:require (clojure.java.io)
-            [clojure.string :as str])
-  (:import (java.util HashSet)))
+            [clojure.string :as str]))
 
 (def board-dim {:x 12 :y 7})
 (def rack-size 16)
 (def max-word-length rack-size)
 (def dictfile (. ClassLoader getSystemResource "word.list"))
 
-(defstruct tile-data :value :frequency)
 (def tile-distr
-  { \E (struct-map tile-data :value 1 :frequency 12)
-    \A (struct-map tile-data :value 1 :frequency 9)
-    \I (struct-map tile-data :value 1 :frequency 9)
-    \O (struct-map tile-data :value 1 :frequency 8)
-    \N (struct-map tile-data :value 1 :frequency 6)
-    \R (struct-map tile-data :value 1 :frequency 6)
-    \T (struct-map tile-data :value 1 :frequency 6)
-    \L (struct-map tile-data :value 1 :frequency 4)
-    \S (struct-map tile-data :value 1 :frequency 4)
-    \U (struct-map tile-data :value 1 :frequency 4)
-    \D (struct-map tile-data :value 2 :frequency 4)
-    \G (struct-map tile-data :value 2 :frequency 3)
-    \B (struct-map tile-data :value 3 :frequency 2)
-    \C (struct-map tile-data :value 3 :frequency 2)
-    \M (struct-map tile-data :value 3 :frequency 2)
-    \P (struct-map tile-data :value 3 :frequency 2)
-    \F (struct-map tile-data :value 4 :frequency 2)
-    \H (struct-map tile-data :value 4 :frequency 2)
-    \V (struct-map tile-data :value 4 :frequency 2)
-    \W (struct-map tile-data :value 4 :frequency 2)
-    \Y (struct-map tile-data :value 4 :frequency 2)
-    \K (struct-map tile-data :value 5 :frequency 1)
-    \J (struct-map tile-data :value 8 :frequency 1)
-    \X (struct-map tile-data :value 8 :frequency 1)
-    \Q (struct-map tile-data :value 10 :frequency 1)
-    \Z (struct-map tile-data :value 10 :frequency 1) }
+  { \E {:value 1 :frequency 12}
+    \A {:value 1 :frequency 9}
+    \I {:value 1 :frequency 9}
+    \O {:value 1 :frequency 8}
+    \N {:value 1 :frequency 6}
+    \R {:value 1 :frequency 6}
+    \T {:value 1 :frequency 6}
+    \L {:value 1 :frequency 4}
+    \S {:value 1 :frequency 4}
+    \U {:value 1 :frequency 4}
+    \D {:value 2 :frequency 4}
+    \G {:value 2 :frequency 3}
+    \B {:value 3 :frequency 2}
+    \C {:value 3 :frequency 2}
+    \M {:value 3 :frequency 2}
+    \P {:value 3 :frequency 2}
+    \F {:value 4 :frequency 2}
+    \H {:value 4 :frequency 2}
+    \V {:value 4 :frequency 2}
+    \W {:value 4 :frequency 2}
+    \Y {:value 4 :frequency 2}
+    \K {:value 5 :frequency 1}
+    \J {:value 8 :frequency 1}
+    \X {:value 8 :frequency 1}
+    \Q {:value 10 :frequency 1}
+    \Z {:value 10 :frequency 1}}
   )    ;; Scrabble(tm) also (\SPACE 0 2)
 
 
@@ -50,10 +48,8 @@
 
 (defn read-dict [fn]
   "Read a wordlist from a file, returning the newly created set"
-  (let [dict (HashSet. 100000)]
-    (with-open [reader (clojure.java.io/reader fn)]
-      (doseq [ln (line-seq reader)] (.add dict (.toUpperCase ln))))
-    dict))
+  (with-open [reader (clojure.java.io/reader fn)]
+    (set (map #(.toUpperCase %) (line-seq reader)))))
 
 (defn tileset []
   "Return a shuffled set of letters (tiles)"
@@ -69,8 +65,7 @@
 
 (defn valid-word? [word dict]
   "Check word against the dictionary"
-  ;; this is just to hide the implementation...
-  (.contains dict (.toUpperCase word)))
+  (contains? dict (.toUpperCase word)))
 
 (defn score-word [w]
   "Tally the values of the letters in a word based
