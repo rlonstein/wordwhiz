@@ -58,10 +58,11 @@
     (for [ letter (keys tile-distr) ] (replicate (:frequency (get tile-distr letter)) letter)))))
 
 (defn fill-board [tiles]
-  "Produce a game board as a list of vectors from the supplied collection"
-  (for [x (range 0 (:x board-dim))]
-    (let [ start (* (:y board-dim) x) end (+ start (:y board-dim))]
-      (subvec tiles start end))))
+  "Produce a game board as a vector of vectors from the supplied collection"
+  (loop [v [] x 0]
+    (let [start (* x (:y board-dim)) end (+ start (:y board-dim))]
+      (if (> x (:x board-dim)) v
+          (recur (conj v (subvec tiles start end)) (inc x))))))
 
 (defn valid-word? [word dict]
   "Check word against the dictionary"
@@ -74,8 +75,15 @@ on tile distribution and word length"
                              (:value (get tile-distr (.charAt w idx)))))))
 
 (defn rack-to-string [game]
-  "Return the rack (list) as a string"
+  "Return the game rack as a string"
   (str/join "" (:rack game)))
+
+(defn get-current-rack-score [game]
+  "Return the current score for the game rack"
+  (let [word (rack-to-string game)]
+    (if (valid-word? word (:dictionary game))
+      (score-word (rack-to-string game))
+      0)))
 
 (defn score-rack [game]
   "Score the rack, checking validity in game dictionary, returns the new game state"
@@ -87,7 +95,7 @@ on tile distribution and word length"
       game)))
 
 (defn rack-full? [game]
-  (if (>= (:rack game) rack-size) true false))
+  (>= (:rack game) rack-size))
 
 (defn rack-tile [col game]
   "Append a tile from the given column to the rack. Returns the tile on success, nil on failure"
@@ -96,7 +104,7 @@ on tile distribution and word length"
 
 (defn tile-at [board x y]
   "Return the tile (letter) at given coordinates"
-  (get (nth board x) y))
+  (nth (nth board x) y))
 
 (defn reset-game [game]
   (merge game {:rack nil :history nil :score 0 :board (fill-board (:tiles game))}))
