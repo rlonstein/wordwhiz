@@ -34,7 +34,9 @@
 
 (def uidescfile (. ClassLoader getSystemResource "ui.bxml"))
 (def uistylesheet "@styles.json")
-(def state (ref {:game {}}))
+(def serializer (atom nil))
+(def mute (atom false))
+(def state (atom (wordwhiz.clj.core/new-game)))
 
 (defn attach-button-listener [btn f]
   (.. btn
@@ -56,14 +58,38 @@
     (cond (isa? widgit-class org.apache.pivot.wtk.Button) (.. widgit (setIcon) (get-image name))
           (isa? widgit-class org.apache.pivot.wtk.ImageView) (.. widgit (setImage) (get-image name)))))
 
-(defn get-widgit-at [container x y]
-  (. container getNamedComponent (str x "," y)))
+(defn get-named-component [c]
+  "Return the named component or nil.
+Performs getName() on org.apache.pivot.wtk.Component or stringifies the object"
+  (let [name ((if (instance? org.apache.pivot.wtk.Component c) (. c getName) (.toString c)))]
+    (. (. @serializer getNamespace) get name)))
 
-(defn update-board [game container]
+(defn get-widgit-at [x y]
+  (get-named-component (str x "," y)))
+
+(defn update-board [game]
   (doseq [row (range 0 (:y (:board-dim game)))
           col (range 0 (:x (:board-dim game)))]
-    (update-widgit-image (get-widgit-at row col) (wordwhiz.clj.core/tile-at (:board game) row col))))
+    (let [widgit (get-widgit-at row col)
+          tile (wordwhiz.clj.core/tile-at (:board game) row col)]
+      (println "updating " widgit " at " row "/" col " with " tile)
+      (update-widgit-image widgit tile))))
 
+(defn update-rack [game]
+  ;;FIXME
+  )
+
+(defn update-score [game]
+  (let [score (wordwhiz.clj.core/get-current-rack-score game)
+        target (get-named-component "rackscore")]
+    (. target setText score)))
+
+(defn button-to-column [btn]
+  "Get the column associated with the button.
+relies on parsing id of widgit, returns nil on failure"
+  (try
+    (Integer/parseInt (nth (clojure.string/split (. btn getName) #",") 1))
+    (catch NumberFormatException e)))
 
 (gen-class
  :name wordwhiz.clj.ui
@@ -76,7 +102,8 @@
   (. DesktopApplicationContext main wordwhiz.clj.ui (into-array String args)))
 
 (defn -startup [this display props]
-  (. (. (org.apache.pivot.beans.BXMLSerializer.) readObject uidescfile) open display))
+  (reset! serializer (org.apache.pivot.beans.BXMLSerializer.))
+  (. (. @serializer readObject uidescfile) open display))
 
 (defn -resume [this])
 
@@ -127,31 +154,39 @@
 (defn bbtn-attach-listener [btn]
   (attach-button-listener btn (fn [b]
                                 (wordwhiz.clj.audio/play-sound (get-resource-fn "audio/twig_snap.flac"))
-                                (println "I'm board button", (. b getName)))))
+                                (swap! state wordwhiz.clj.core/rack-tile (. b getName))
+                                (update-board state))))
 
 (defn reset-attach-listener [btn]
   (attach-button-listener btn (fn [b]
                                 (wordwhiz.clj.audio/play-sound (get-resource-fn "audio/whoosh.flac"))
-                                (println "reset button"))))
+                                (swap! state wordwhiz.clj.core/reset-game)
+                                (update-board state)
+                                (update-rack state)
+                                (update-score state))))
 
 (defn score-attach-listener [btn]
   (attach-button-listener btn (fn [b]
                                 (wordwhiz.clj.audio/play-sound (get-resource-fn "audio/mechanical2.flac"))
-                                (println "score button"))))
+                                (update-score (swap! state wordwhiz.clj.core/score-rack))
+                                (update-rack state))))
 
 (defn undo-attach-listener [btn]
   (attach-button-listener btn (fn [b]
                                 (wordwhiz.clj.audio/play-sound (get-resource-fn "audio/mechanical2.flac"))
-                                (println "undo button"))))
+                                (swap! state wordwhiz.clj.core/undo-move)
+                                (update-rack state)
+                                (update-score state))))
 
 (defn newgame-attach-listener [btn]
   (attach-button-listener btn (fn [b]
                                 (wordwhiz.clj.audio/play-sound (get-resource-fn "audio/toilet_flush.flac"))
-                                (println "newgame button"))))
+                                (reset! state (wordwhiz.clj.core/new-game)))))
 
 (defn quit-attach-listener [btn]
   (attach-button-listener btn (fn [b]
                                 (wordwhiz.clj.audio/play-sound
                                  (get-resource-fn "audio/vicki-bye.au")
-                                 (fn [e] (java.lang.System/exit 0))))))
+                                 (fn [e] (java.lang.System/exit 0))
+                                 (:stop (wordwhiz.clj.audio/listener-event-types))))))
 
