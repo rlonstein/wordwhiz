@@ -74,24 +74,24 @@ on tile distribution and word length"
   (* (.length w) (reduce + (for [idx (range 0 (.length w))]
                              (:value (get tile-distr (.charAt w idx)))))))
 
-(defn rack-to-string [game]
+(defn rack->string [game]
   "Return the game rack as a string"
   (str/join "" (:rack game)))
 
-(defn get-current-rack-score [game]
-  "Return the current score for the game rack"
-  (let [word (rack-to-string game)]
+(defn rack->score [game]
+  "Return the current score for the game rack, zero if invalid"
+  (let [word (rack->string game)]
     (if (valid-word? word (:dictionary game))
-      (score-word (rack-to-string game))
+      (score-word (word))
       0)))
 
 (defn score-rack [game]
   "Score the rack, checking validity in game dictionary, returns the new game state"
-  (let [ word (rack-to-string game)]
-    (if (valid-word? word (:dictionary game))
+  (let [ points (rack->score game)]
+    (if-not (zero? points)
       (merge game {:rack nil
                    :history (conj (:history game) \S (:score game))
-                   :score (+ (score-word word) (:score game))})
+                   :score (+ points (:score game))})
       game)))
 
 (defn rack-full? [game]
