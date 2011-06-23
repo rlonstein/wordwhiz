@@ -36,6 +36,7 @@
 (def uistylesheet "@styles.json")
 (def serializer (atom nil))
 (def mute (atom false))
+(def debug (atom false))
 (def state (atom (wordwhiz.clj.core/new-game)))
 
 (defn attach-button-listener [btn f]
@@ -80,7 +81,7 @@ Performs getName() on org.apache.pivot.wtk.Component or stringifies the object"
   )
 
 (defn update-score [game]
-  (let [score (wordwhiz.clj.core/get-current-rack-score game)
+  (let [score (wordwhiz.clj.core/rack->score game)
         target (get-named-component "rackscore")]
     (. target setText score)))
 
@@ -151,6 +152,12 @@ relies on parsing id of widgit, returns nil on failure"
  :post-init attach-listener
  :prefix quit-)
 
+(gen-class
+ :name wordwhiz.clj.ui.Checkbox
+ :extends org.apache.pivot.wtk.Checkbox
+ :post-init attach-listener
+ :prefix checkbox-)
+
 (defn bbtn-attach-listener [btn]
   (attach-button-listener btn (fn [b]
                                 (wordwhiz.clj.audio/play-sound (get-resource-fn "audio/twig_snap.flac"))
@@ -190,3 +197,8 @@ relies on parsing id of widgit, returns nil on failure"
                                  (fn [e] (java.lang.System/exit 0))
                                  (:stop (wordwhiz.clj.audio/listener-event-types))))))
 
+(defn checkbox-attach-listener [btn]
+  (attach-button-listener btn (fn [b]
+                                (let [ id (. b getName)]
+                                  (cond (= id "Mute") (reset! mute (not @mute))
+                                        (= id "Debug") (reset! debug (not @debug)))))))
