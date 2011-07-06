@@ -44,12 +44,21 @@
   )    ;; Scrabble(tm) also (\SPACE 0 2)
 
 
-(defstruct game-state :tiles :history :score :board :rack :dictionary :playing)
+(defstruct game-state :tiles :history :score :board :rack :dictionary :playing :board-dim)
 
 (defn read-dict [fn]
   "Read a wordlist from a file, returning the newly created set"
   (with-open [reader (clojure.java.io/reader fn)]
     (set (map #(.toUpperCase %) (line-seq reader)))))
+
+(def game-defaults {:tiles []
+                    :history []
+                    :score 0
+                    :board []
+                    :board-dim board-dim
+                    :rack []
+                    :playing true
+                    :dictionary (read-dict dictfile)})
 
 (defn tileset []
   "Return a shuffled set of letters (tiles)"
@@ -107,21 +116,15 @@ on tile distribution and word length"
   (nth (nth board x) y))
 
 (defn reset-game [game]
-  (merge game {:rack nil :history nil :score 0 :board (fill-board (:tiles game))}))
+  (merge game {:board (fill-board (:tiles game))
+               :rack (:rack game-defaults)
+               :score (:score game-defaults)
+               :history (:history game-defaults)}))
 
 (defn undo-move [game]
   "Rewind actions from the game history"
   ;;FIXME
   )
-
-(def game-defaults {:tiles nil
-                    :history nil
-                    :score 0
-                    :board nil
-                    :board-dim board-dim
-                    :rack nil
-                    :playing true
-                    :dictionary (read-dict dictfile)})
 
 (defn new-game []
   "Return a new populated game state"
