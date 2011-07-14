@@ -118,7 +118,7 @@ on tile distribution and word length"
     (println "tile==" tile "col==" col)
     (if (and (not (nil? tile)) (not (rack-full? game)))
       (let [rack (conj (:rack game) tile)
-            history (conj (:history game) (list col tile) )
+            history (conj (:history game) (list \M col tile) )
             board (assoc (:board game) col column)]
         (merge game {:board board :rack rack :history history}))
       game)))
