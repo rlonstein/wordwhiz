@@ -109,12 +109,12 @@ on tile distribution and word length"
 
 (defn rack-nth [i game]
   "Return letter at specified position on the rack of the supplied game"
-  (nth (:rack game) i))
+  (get (:rack game) i))
 
 (defn rack-tile [game col]
   "Append a tile from the given column to the rack. Returns the modified game"
   (let [tile (first (nth (:board game) col))
-        column (rest (nth (:board game) col))]
+        column (vec (rest (nth (:board game) col)))]
     (println "tile==" tile "col==" col)
     (if (and (not (nil? tile)) (not (rack-full? game)))
       (let [rack (conj (:rack game) tile)
@@ -125,7 +125,7 @@ on tile distribution and word length"
 
 (defn tile-at [board x y]
   "Return the tile (letter) at given coordinates"
-  (nth (nth board x) y))
+  (get (get board x) y))
 
 (defn reset-game [game]
   (merge game {:board (fill-board (:tiles game))
