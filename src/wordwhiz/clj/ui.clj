@@ -39,14 +39,19 @@
 (def uistylesheet "@styles.json")
 (def serializer (ref (org.apache.pivot.beans.BXMLSerializer.)))
 (def mute (atom false))
-(def debug (atom false))
+(def debug (atom true))
 (def state (ref (wordwhiz.clj.core/new-game)))
+
+(defmacro notnull! [v]
+  "convenience macro for liberally asserting not null"
+  `(assert (not (nil? ~v))))
 
 (defn debug-game-state [game]
   (when @debug
     (println "debug-game-state()" )
-    (doseq [ k [:rack :board :score :board-dim :history] ]
-      (println "\t" k (k game)))))
+    (doseq [ k [:rack :board :score :board-dim :history :rack-size :playing] ]
+      (println "\t" k (k game)))
+    (println "\t :dictionary" (count (:dictionary game)))))
 
 (defn attach-button-listener [btn f]
   (.. btn
@@ -60,21 +65,15 @@
 (defn get-resource-fn [res]
   (.. (get-resource res) (getFile)))
 
-(defn update-button-icon [b img]
-  (let [ bdata (.getButtonData b)]
-    (when (nil? bdata) (.setButtonData b (org.apache.pivot.wtk.content.ButtonData.)))
-    (.. b (getButtonData) (setIcon img))))
+(defmulti update-widgit-image (fn [c _] (class c)))
 
-(defn update-imageview [i img]
-  (.. i (setImage img)))
+(defmethod update-widgit-image org.apache.pivot.wtk.Button [widgit url]
+  (let [ bdata (.getButtonData widgit)]
+    (when (nil? bdata) (.setButtonData widgit (org.apache.pivot.wtk.content.ButtonData.)))
+    (.. widgit (getButtonData) (setIcon (get-resource url)))))
 
-(defn update-widgit-image [widgit name]
-  (let [widgit-class (class widgit)
-        url (get-resource name)]
-    (when @debug (println "update-widgit-image(" widgit name ")\n\t" url))
-    (cond
-     (isa? widgit-class org.apache.pivot.wtk.Button) (update-button-icon widgit url)
-     (isa? widgit-class org.apache.pivot.wtk.ImageView) (update-imageview widgit url))))
+(defmethod update-widgit-image org.apache.pivot.wtk.ImageView [widgit url]
+  (.. widgit (setImage (get-resource url))))
 
 (defn debug-iterate-ns [ns]
   (when @debug
@@ -91,34 +90,62 @@ Performs getName() on org.apache.pivot.wtk.Component or stringifies the object"
   (let [name (if (instance? org.apache.pivot.wtk.Component c) (.getName c) (.toString c))
         ns (dosync (.getNamespace @serializer))
         component (.get ns name)]
-    (printf "get-named-component(%s):\n\tname==\"%s\"\tcomponent==%s\n" c name component)
-;;    (debug-iterate-ns ns)
-    (assert (not (nil? component)))
+    ;; (printf "get-named-component(%s):\n\tname==\"%s\"\tcomponent==%s\n" c name component)
+    ;; (debug-iterate-ns ns)
+    (notnull! component)
     component))
 
 (defn get-widgit-at [x y]
   (get-named-component (str x "," y)))
 
-(defn update-board [game]
+(defn get-nth-rack-widgit [n]
+  "Return the rack ui component at specified offset"
+  (get-named-component (str "rack" "," n)))
+
+(defn char->tileimage [c]
+  (str "image/tiles/tile-" c ".png"))
+
+(defn update-board [game & {:keys [sleepms]}]
   (doseq [col (range 0 (:x (:board-dim game)))
           row (range 0 (:y (:board-dim game)))]
     ;; notice the monkey-business here...
     ;; ui layout row,col but board structure is col,row
     (let [tile (wordwhiz.clj.core/tile-at (:board game) col row)
-          tile-img (str "image/tiles/tile-" tile ".png" )
+          tile-img (char->tileimage tile)
           widgit (get-widgit-at row col)]
-;;      (when @debug (println "update-board():" row col tile tile-img widgit))
+      ;;      (when @debug (println "update-board():" row col tile tile-img widgit))
+      (when sleepms (Thread/sleep sleepms))
+      (notnull! tile-img)
+      (notnull! widgit)
       (update-widgit-image widgit tile-img))))
 
 (defn update-rack [game]
-  ;;FIXME
-  )
+  (notnull! game)
+  (doseq [ idx (range 0 (:rack-size game))]
+    (let [letter (wordwhiz.clj.core/rack-nth idx game)
+          tile-img (char->tileimage letter)
+          widgit (get-nth-rack-widgit idx)]
+      (update-widgit-image widgit tile-img))))
 
 (defn update-score [game]
+  (notnull! game)
   (let [score (wordwhiz.clj.core/rack->score game)
         target (get-named-component "rackscore")]
-    (assert (not (nil? target)))
+    (notnull! target)
     (.setText target (str score))))
+
+(defn btn-update-board []
+  (notnull! @state)
+  (debug-game-state @state)
+  (update-board @state))
+
+(defn btn-update-rack []
+  (notnull! @state)
+  (update-rack @state))
+
+(defn btn-update-score []
+  (notnull! @state)
+  (update-score @state))
 
 (defn button-to-column [btn]
   "Get the column associated with the button.
@@ -128,6 +155,7 @@ relies on parsing id of widgit, returns nil on failure"
     (catch NumberFormatException e)))
 
 (defn startup-board [game]
+  (notnull! game)
   (let [blank [ ["space" "space" "space" "space" "space" "space" "space"]
                 ["space" "space" "space" "space" "space" "space" "space"]
                 ["space" "space" "space" "space" "space" "space" "space"]
@@ -153,8 +181,9 @@ relies on parsing id of widgit, returns nil on failure"
                 ["space" "space" "space" "space" "space" "space" "N"]
                 ["space" "space" "space" "space" "space" "space" "space"] ]
         ]
-    (update-board (merge wordwhiz.clj.core/game-defaults {:board title}))
-    (update-board (merge wordwhiz.clj.core/game-defaults {:board blank}))
+    (update-board (merge wordwhiz.clj.core/game-defaults {:board title}) :sleepms 10)
+    (Thread/sleep 1000)
+    (update-board (merge wordwhiz.clj.core/game-defaults {:board blank}) :sleepms 10)
     (update-board game)))
 
 (gen-class
@@ -169,8 +198,8 @@ relies on parsing id of widgit, returns nil on failure"
 
 (defn -startup [this display props]
   (let [ window (. @serializer readObject uidescfile) ]
-    (.open window display)
-    (startup-board @state)))
+    (.open window display))
+  (startup-board @state))
 
 (defn -resume [this])
 
@@ -228,48 +257,43 @@ relies on parsing id of widgit, returns nil on failure"
   (attach-button-listener btn (fn [b]
                                 (when (not @mute)
                                   (wordwhiz.clj.audio/play-sound (get-resource-fn "audio/twig_snap.flac")))
+                                (debug-game-state @state)
+                                (println "invoking rack-tile for " (.getName b))
                                 (dosync
-                                 (alter state wordwhiz.clj.core/rack-tile (.getName b))
-                                 (debug-game-state @state)
-                                 (update-board @state)))))
+                                 (alter state wordwhiz.clj.core/rack-tile (.getName b)))
+                                (debug-game-state @state)
+                                (btn-update-board))))
 
 (defn reset-attach-listener [btn]
   (attach-button-listener btn (fn [b]
                                 (when (not @mute)
                                   (wordwhiz.clj.audio/play-sound (get-resource-fn "audio/whoosh.flac")))
                                 (dosync (alter state wordwhiz.clj.core/reset-game))
-                                (debug-game-state @state)
-                                (update-board @state)
-                                (update-rack @state)
-                                (update-score @state))))
+                                (btn-update-board)
+                                (btn-update-rack)
+                                (btn-update-score))))
 
 (defn score-attach-listener [btn]
   (attach-button-listener btn (fn [b]
                                 (when (not @mute)
                                   (wordwhiz.clj.audio/play-sound (get-resource-fn "audio/mechanical2.flac")))
-                                (dosync
-                                 (debug-game-state @state)
-                                 (update-score (alter state wordwhiz.clj.core/score-rack))
-                                 (update-rack @state)))))
+                                (dosync (update-score (alter state wordwhiz.clj.core/score-rack)))
+                                (btn-update-rack))))
 
 (defn undo-attach-listener [btn]
   (attach-button-listener btn (fn [b]
                                 (when (not @mute)
                                   (wordwhiz.clj.audio/play-sound (get-resource-fn "audio/mechanical2.flac")))
-                                (dosync
-                                 (debug-game-state state)
-                                 (alter state wordwhiz.clj.core/undo-move)
-                                 (update-rack @state)
-                                 (update-score @state)))))
+                                (dosync (alter state wordwhiz.clj.core/undo-move))
+                                (btn-update-rack)
+                                (btn-update-score))))
 
 (defn newgame-attach-listener [btn]
   (attach-button-listener btn (fn [b]
                                 (when (not @mute)
                                   (wordwhiz.clj.audio/play-sound (get-resource-fn "audio/toilet_flush.flac")))
                                 (dosync
-                                 (debug-game-state @state)
-                                 (alter state (wordwhiz.clj.core/new-game))
-                                 (debug-game-state @state)))))
+                                 (alter state (wordwhiz.clj.core/new-game))))))
 
 (defn quit-attach-listener [btn]
   (attach-button-listener btn (fn [b]
