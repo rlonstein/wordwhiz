@@ -105,15 +105,23 @@ on tile distribution and word length"
       game)))
 
 (defn rack-full? [game]
-  (>= (:rack game) (:rack-size game)))
+  (>= (count (:rack game)) (:rack-size game)))
 
 (defn rack-nth [i game]
   "Return letter at specified position on the rack of the supplied game"
   (nth (:rack game) i))
 
 (defn rack-tile [game col]
-  "Append a tile from the given column to the rack. Returns the tile on success, nil on failure"
-  game)
+  "Append a tile from the given column to the rack. Returns the modified game"
+  (let [tile (first (nth (:board game) col))
+        column (rest (nth (:board game) col))]
+    (println "tile==" tile "col==" col)
+    (if (and (not (nil? tile)) (not (rack-full? game)))
+      (let [rack (conj (:rack game) tile)
+            history (conj (:history game) (list col tile) )
+            board (assoc (:board game) col column)]
+        (merge game {:board board :rack rack :history history}))
+      game)))
 
 (defn tile-at [board x y]
   "Return the tile (letter) at given coordinates"
