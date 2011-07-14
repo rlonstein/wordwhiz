@@ -57,6 +57,7 @@
                     :board []
                     :board-dim board-dim
                     :rack []
+                    :rack-size rack-size
                     :playing true
                     :dictionary (read-dict dictfile)})
 
@@ -104,12 +105,15 @@ on tile distribution and word length"
       game)))
 
 (defn rack-full? [game]
-  (>= (:rack game) rack-size))
+  (>= (:rack game) (:rack-size game)))
 
-(defn rack-tile [col game]
+(defn rack-nth [i game]
+  "Return letter at specified position on the rack of the supplied game"
+  (nth (:rack game) i))
+
+(defn rack-tile [game col]
   "Append a tile from the given column to the rack. Returns the tile on success, nil on failure"
-  ;;FIXME
-  )
+  game)
 
 (defn tile-at [board x y]
   "Return the tile (letter) at given coordinates"
