@@ -91,7 +91,8 @@ on tile distribution and word length"
 (defn rack->score [game]
   "Return the current score for the game rack, zero if invalid"
   (let [word (rack->string game)]
-    (if (valid-word? word (:dictionary game))
+    (if (and (valid-word? word (:dictionary game))
+             ())
       (score-word word)
       0)))
 
@@ -99,8 +100,8 @@ on tile distribution and word length"
   "Score the rack, checking validity in game dictionary, returns the new game state"
   (let [ points (rack->score game)]
     (if-not (zero? points)
-      (merge game {:rack nil
-                   :history (conj (:history game) \S (:score game))
+      (merge game {:rack []
+                   :history (conj (:history game) (list \S (:score game)))
                    :score (+ points (:score game))})
       game)))
 
