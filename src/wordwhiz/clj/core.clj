@@ -92,7 +92,7 @@ on tile distribution and word length"
   "Return the current score for the game rack, zero if invalid"
   (let [word (rack->string game)]
     (if (valid-word? word (:dictionary game))
-      (score-word (word))
+      (score-word word)
       0)))
 
 (defn score-rack [game]
