@@ -101,7 +101,7 @@ on tile distribution and word length"
   (let [ points (rack->score game)]
     (if-not (zero? points)
       (merge game {:rack []
-                   :history (conj (:history game) (list \S (:score game)))
+                   :history (conj (:history game) (list \S (:score game) (:rack game) ))
                    :score (+ points (:score game))})
       game)))
 
@@ -136,16 +136,27 @@ on tile distribution and word length"
                :score (:score game-defaults)
                :history (:history game-defaults)}))
 
+(defn board-col [game col]
+  "Return the specified column from the board"
+  (get (:board game) col))
+
 (defn undo-move [game]
   "Rewind actions from the game history"
-  (let [last-move (last (:history game))
-        history (butlast (:history game))
+  (let [last-move (first (:history game))
+        history (rest (:history game))
         action (first last-move)]
     (cond
      (nil? last-move) game
-     (= 'M action) game ;FIXME
-     (= 'S action) game ;FIXME
-     )))
+     (= \M action) (let [tile (nth last-move 2) column (nth last-move 1)]
+                     (println "undo-move: " last-move action tile column)
+                     (merge game {:history history
+                                  :rack (vec (butlast (:rack game)))
+                                  :board (assoc (:board game) column (vec (cons tile (board-col game column))))}))
+     (= \S action) (let [old-score (nth last-move 1) rack (nth last-move 2)]
+                     (merge game {:history history
+                                  :rack rack
+                                  :score old-score}))
+     true game)))
 
 (defn new-game []
   "Return a new populated game state"
