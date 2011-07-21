@@ -106,6 +106,7 @@ on tile distribution and word length"
       game)))
 
 (defn rack-full? [game]
+  "Return true if the game rack is full"
   (>= (count (:rack game)) (:rack-size game)))
 
 (defn rack-nth [i game]
@@ -129,6 +130,7 @@ on tile distribution and word length"
   (get (get board x) y))
 
 (defn reset-game [game]
+  "Return a game with any modified state reset to starting condition"
   (merge game {:board (fill-board (:tiles game))
                :rack (:rack game-defaults)
                :score (:score game-defaults)
@@ -136,8 +138,14 @@ on tile distribution and word length"
 
 (defn undo-move [game]
   "Rewind actions from the game history"
-  ;;FIXME
-  )
+  (let [last-move (last (:history game))
+        history (butlast (:history game))
+        action (first last-move)]
+    (cond
+     (nil? last-move) game
+     (= 'M action) game ;FIXME
+     (= 'S action) game ;FIXME
+     )))
 
 (defn new-game []
   "Return a new populated game state"
