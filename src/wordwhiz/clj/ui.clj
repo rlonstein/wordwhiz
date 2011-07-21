@@ -150,15 +150,18 @@ Performs getName() on org.apache.pivot.wtk.Component or stringifies the object"
   (update-gamescore game))
 
 (defn btn-update-board []
+  ;; TODO: maybe unneeded, trying to avoid capture of global ref in btn callback
   (notnull! @state)
   (debug-game-state @state)
   (update-board @state))
 
 (defn btn-update-rack []
+  ;; TODO: maybe unneeded, trying to avoid capture of global ref in btn callback
   (notnull! @state)
   (update-rack @state))
 
 (defn btn-update-score []
+  ;; TODO: maybe unneeded, trying to avoid capture of global ref in btn callback
   (notnull! @state)
   (update-score @state))
 
@@ -169,37 +172,47 @@ relies on parsing id of widgit, returns nil on failure"
     (Integer/parseInt (nth (clojure.string/split (. btn getName) #",") 1))
     (catch NumberFormatException e)))
 
+;; (defn startup-board [game]
+;;   "Render a title sequence on the board"
+;;   ;;FIXME: this doesn't work because the ui updated asynchronously
+;;   (notnull! game)
+;;   (let [blank [ ["space" "space" "space" "space" "space" "space" "space"]
+;;                 ["space" "space" "space" "space" "space" "space" "space"]
+;;                 ["space" "space" "space" "space" "space" "space" "space"]
+;;                 ["space" "space" "space" "space" "space" "space" "space"]
+;;                 ["space" "space" "space" "space" "space" "space" "space"]
+;;                 ["space" "space" "space" "space" "space" "space" "space"]
+;;                 ["space" "space" "space" "space" "space" "space" "space"]
+;;                 ["space" "space" "space" "space" "space" "space" "space"]
+;;                 ["space" "space" "space" "space" "space" "space" "space"]
+;;                 ["space" "space" "space" "space" "space" "space" "space"]
+;;                 ["space" "space" "space" "space" "space" "space" "space"]
+;;                 ["space" "space" "space" "space" "space" "space" "space"] ]
+;;         title [ ["space" "space" "space" "space" "space" "space" "space"]
+;;                 ["space" "space" "space" "space" "T" "space" "R"]
+;;                 ["space" "W" "space" "space" "I" "space" "space"]
+;;                 ["space" "O" "space" "L" "L" "space" "L"]
+;;                 ["space" "R" "space" "E" "E" "space" "O"]
+;;                 ["space" "D" "space" "T" "space" "space" "N"]
+;;                 ["space" "W" "space" "T" "G" "space" "S"]
+;;                 ["space" "H" "space" "E" "A" "space" "T"]
+;;                 ["space" "I" "space" "R" "M" "space" "E"]
+;;                 ["space" "Z" "space" "space" "E" "space" "I"]
+;;                 ["space" "space" "space" "space" "space" "space" "N"]
+;;                 ["space" "space" "space" "space" "space" "space" "space"] ]
+;;         ]
+;;     (update-board (merge wordwhiz.clj.core/game-defaults {:board title}) :sleepms 10)
+;;     (Thread/sleep 1000)
+;;     (update-board (merge wordwhiz.clj.core/game-defaults {:board blank}) :sleepms 10)
+;;     (update-board game)))
+
 (defn startup-board [game]
-  (notnull! game)
-  (let [blank [ ["space" "space" "space" "space" "space" "space" "space"]
-                ["space" "space" "space" "space" "space" "space" "space"]
-                ["space" "space" "space" "space" "space" "space" "space"]
-                ["space" "space" "space" "space" "space" "space" "space"]
-                ["space" "space" "space" "space" "space" "space" "space"]
-                ["space" "space" "space" "space" "space" "space" "space"]
-                ["space" "space" "space" "space" "space" "space" "space"]
-                ["space" "space" "space" "space" "space" "space" "space"]
-                ["space" "space" "space" "space" "space" "space" "space"]
-                ["space" "space" "space" "space" "space" "space" "space"]
-                ["space" "space" "space" "space" "space" "space" "space"]
-                ["space" "space" "space" "space" "space" "space" "space"] ]
-        title [ ["space" "space" "space" "space" "space" "space" "space"]
-                ["space" "space" "space" "space" "T" "space" "R"]
-                ["space" "W" "space" "space" "I" "space" "space"]
-                ["space" "O" "space" "L" "L" "space" "L"]
-                ["space" "R" "space" "E" "E" "space" "O"]
-                ["space" "D" "space" "T" "space" "space" "N"]
-                ["space" "W" "space" "T" "G" "space" "S"]
-                ["space" "H" "space" "E" "A" "space" "T"]
-                ["space" "I" "space" "R" "M" "space" "E"]
-                ["space" "Z" "space" "space" "E" "space" "I"]
-                ["space" "space" "space" "space" "space" "space" "N"]
-                ["space" "space" "space" "space" "space" "space" "space"] ]
-        ]
-    (update-board (merge wordwhiz.clj.core/game-defaults {:board title}) :sleepms 10)
-    (Thread/sleep 1000)
-    (update-board (merge wordwhiz.clj.core/game-defaults {:board blank}) :sleepms 10)
-    (update-board game)))
+  (update-board game))
+
+(defn do-startup-board []
+  "Invoke startup-board with the global game state"
+  ;; TODO: maybe unneeded, trying to avoid capture of global ref
+  (startup-board @state))
 
 (gen-class
  :name wordwhiz.clj.ui
@@ -209,12 +222,14 @@ relies on parsing id of widgit, returns nil on failure"
 (defn -main [& args]
   "Entry point for application-style (desktop) execution"
   (. DesktopApplicationContext applyStylesheet uistylesheet)
-  (. DesktopApplicationContext main wordwhiz.clj.ui (into-array String args)))
+  (. DesktopApplicationContext main wordwhiz.clj.ui (into-array String args))
+  (Thread/sleep 1000)
+  (. DesktopApplicationContext queueCallback do-startup-board true))
 
 (defn -startup [this display props]
+  "Render a title sequence on the board"
   (let [ window (. @serializer readObject uidescfile) ]
-    (.open window display))
-  (startup-board @state))
+    (.open window display)))
 
 (defn -resume [this])
 
