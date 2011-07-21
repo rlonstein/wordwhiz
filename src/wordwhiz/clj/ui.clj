@@ -68,21 +68,26 @@
 (defmulti update-widgit-image (fn [c _] (class c)))
 
 (defmethod update-widgit-image org.apache.pivot.wtk.Button [widgit url]
+  (notnull! widgit)
+  (notnull! url)
+  ;; (println "update-widgit-image" widgit url)
   (let [ bdata (.getButtonData widgit)]
     (when (nil? bdata) (.setButtonData widgit (org.apache.pivot.wtk.content.ButtonData.)))
     (.. widgit (getButtonData) (setIcon (get-resource url)))))
 
 (defmethod update-widgit-image org.apache.pivot.wtk.ImageView [widgit url]
+  (notnull! widgit)
+  (notnull! url)
   (.. widgit (setImage (get-resource url))))
 
-(defn debug-iterate-ns [ns]
-  (when @debug
-    (println "debug-iterate-ns()")
-    (let [i (.iterator ns)]
-      (doseq [ k (loop [ acc [] next (.hasNext i) ]
-                   (if next (recur (conj acc (.next i)) (.hasNext i))
-                       acc))]
-        (println "\t" k (.get ns k))))))
+;; (defn debug-iterate-ns [ns]
+;;   (when @debug
+;;     (println "debug-iterate-ns()")
+;;     (let [i (.iterator ns)]
+;;       (doseq [ k (loop [ acc [] next (.hasNext i) ]
+;;                    (if next (recur (conj acc (.next i)) (.hasNext i))
+;;                        acc))]
+;;         (println "\t" k (.get ns k))))))
 
 (defn get-named-component [c]
   "Return the named component or nil.
@@ -120,19 +125,29 @@ Performs getName() on org.apache.pivot.wtk.Component or stringifies the object"
       (update-widgit-image widgit tile-img))))
 
 (defn update-rack [game]
+  "Update the images in the rack, run only for the ui side-effect"
   (notnull! game)
   (doseq [ idx (range 0 (:rack-size game))]
     (let [letter (wordwhiz.clj.core/rack-nth idx game)
           tile-img (char->tileimage letter)
           widgit (get-nth-rack-widgit idx)]
+      ;; (println "debug: update-rack()" letter tile-img)
       (update-widgit-image widgit tile-img))))
 
-(defn update-score [game]
+(defn update-rackscore [game]
   (notnull! game)
   (let [score (wordwhiz.clj.core/rack->score game)
         target (get-named-component "rackscore")]
     (notnull! target)
-    (.setText target (str score))))
+    (.setText target (.toString score))))
+
+(defn update-gamescore [game]
+  (notnull! game)
+  (.setText (get-named-component "score") (.toString (:score game))))
+
+(defn update-score [game]
+  (update-rackscore game)
+  (update-gamescore game))
 
 (defn btn-update-board []
   (notnull! @state)
@@ -257,12 +272,11 @@ relies on parsing id of widgit, returns nil on failure"
   (attach-button-listener btn (fn [b]
                                 (when (not @mute)
                                   (wordwhiz.clj.audio/play-sound (get-resource-fn "audio/twig_snap.flac")))
-                                (debug-game-state @state)
-                                (println "invoking rack-tile for " (.getName b))
                                 (dosync
-                                 (alter state wordwhiz.clj.core/rack-tile (.getName b)))
-                                (debug-game-state @state)
-                                (btn-update-board))))
+                                 (alter state wordwhiz.clj.core/rack-tile (button-to-column b)))
+                                (btn-update-rack)
+                                (btn-update-board)
+                                (btn-update-score))))
 
 (defn reset-attach-listener [btn]
   (attach-button-listener btn (fn [b]
@@ -277,7 +291,8 @@ relies on parsing id of widgit, returns nil on failure"
   (attach-button-listener btn (fn [b]
                                 (when (not @mute)
                                   (wordwhiz.clj.audio/play-sound (get-resource-fn "audio/mechanical2.flac")))
-                                (dosync (update-score (alter state wordwhiz.clj.core/score-rack)))
+                                (dosync (alter state wordwhiz.clj.core/score-rack))
+                                (btn-update-score)
                                 (btn-update-rack))))
 
 (defn undo-attach-listener [btn]
@@ -292,8 +307,7 @@ relies on parsing id of widgit, returns nil on failure"
   (attach-button-listener btn (fn [b]
                                 (when (not @mute)
                                   (wordwhiz.clj.audio/play-sound (get-resource-fn "audio/toilet_flush.flac")))
-                                (dosync
-                                 (alter state (wordwhiz.clj.core/new-game))))))
+                                (dosync (alter state (wordwhiz.clj.core/new-game))))))
 
 (defn quit-attach-listener [btn]
   (attach-button-listener btn (fn [b]
