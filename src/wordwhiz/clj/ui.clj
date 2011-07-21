@@ -71,9 +71,10 @@
   (notnull! widgit)
   (notnull! url)
   ;; (println "update-widgit-image" widgit url)
-  (let [ bdata (.getButtonData widgit)]
+  (let [ bdata (.getButtonData widgit)
+         icon  (get-resource url) ]
     (when (nil? bdata) (.setButtonData widgit (org.apache.pivot.wtk.content.ButtonData.)))
-    (.. widgit (getButtonData) (setIcon (get-resource url)))))
+    (.. widgit (getButtonData) (setIcon icon))))
 
 (defmethod update-widgit-image org.apache.pivot.wtk.ImageView [widgit url]
   (notnull! widgit)
@@ -139,6 +140,7 @@ Performs getName() on org.apache.pivot.wtk.Component or stringifies the object"
   (let [score (wordwhiz.clj.core/rack->score game)
         target (get-named-component "rackscore")]
     (notnull! target)
+    ;; TODO: set color of textinput "#CC3333" "#33CC33"
     (.setText target (.toString score))))
 
 (defn update-gamescore [game]
