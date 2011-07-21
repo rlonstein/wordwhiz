@@ -163,6 +163,7 @@ Performs getName() on org.apache.pivot.wtk.Component or stringifies the object"
 (defn btn-update-score []
   ;; TODO: maybe unneeded, trying to avoid capture of global ref in btn callback
   (notnull! @state)
+  (debug-game-state @state)
   (update-score @state))
 
 (defn button-to-column [btn]
@@ -316,7 +317,8 @@ relies on parsing id of widgit, returns nil on failure"
                                   (wordwhiz.clj.audio/play-sound (get-resource-fn "audio/mechanical2.flac")))
                                 (dosync (alter state wordwhiz.clj.core/undo-move))
                                 (btn-update-rack)
-                                (btn-update-score))))
+                                (btn-update-score)
+                                (btn-update-board))))
 
 (defn newgame-attach-listener [btn]
   (attach-button-listener btn (fn [b]
