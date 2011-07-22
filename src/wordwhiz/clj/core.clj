@@ -92,7 +92,7 @@ on tile distribution and word length"
   "Return the current score for the game rack, zero if invalid"
   (let [word (rack->string game)]
     (if (and (valid-word? word (:dictionary game))
-             ())
+             (>= (count word) 2))
       (score-word word)
       0)))
 
