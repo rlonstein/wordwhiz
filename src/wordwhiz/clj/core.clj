@@ -142,8 +142,8 @@ on tile distribution and word length"
 
 (defn undo-move [game]
   "Rewind actions from the game history"
-  (let [last-move (first (:history game))
-        history (rest (:history game))
+  (let [last-move (last (:history game))
+        history (butlast (:history game))
         action (first last-move)]
     (cond
      (nil? last-move) game
