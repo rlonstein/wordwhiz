@@ -74,7 +74,9 @@
   (let [ bdata (.getButtonData widgit)
          icon  (get-resource url) ]
     (when (nil? bdata) (.setButtonData widgit (org.apache.pivot.wtk.content.ButtonData.)))
-    (.. widgit (getButtonData) (setIcon icon))))
+    (if (nil? icon)
+      (.setButtonData widgit (org.apache.pivot.wtk.content.ButtonData.))
+      (.. widgit (getButtonData) (setIcon icon)))))
 
 (defmethod update-widgit-image org.apache.pivot.wtk.ImageView [widgit url]
   (notnull! widgit)
