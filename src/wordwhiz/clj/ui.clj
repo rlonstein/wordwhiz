@@ -156,7 +156,7 @@ Performs getName() on org.apache.pivot.wtk.Component or stringifies the object"
 (defn btn-update-board []
   ;; TODO: maybe unneeded, trying to avoid capture of global ref in btn callback
   (notnull! @state)
-  (println "btn-update-board")
+  (when @debug (println "btn-update-board"))
   (debug-game-state @state)
   (update-board @state))
 
@@ -168,7 +168,7 @@ Performs getName() on org.apache.pivot.wtk.Component or stringifies the object"
 (defn btn-update-score []
   ;; TODO: maybe unneeded, trying to avoid capture of global ref in btn callback
   (notnull! @state)
-  (println "btn-update-score")
+  (when @debug (println "btn-update-score"))
   (debug-game-state @state)
   (update-score @state))
 
