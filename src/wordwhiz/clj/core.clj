@@ -52,7 +52,7 @@
     (set (map #(.toUpperCase %) (line-seq reader)))))
 
 (def game-defaults {:tiles []
-                    :history []
+                    :history ()
                     :score 0
                     :board []
                     :board-dim board-dim
@@ -143,8 +143,8 @@ on tile distribution and word length"
 
 (defn undo-move [game]
   "Rewind actions from the game history"
-  (let [last-move (last (:history game))
-        history (butlast (:history game))
+  (let [last-move (first (:history game))
+        history (rest (:history game))
         action (first last-move)]
     (cond
      (nil? last-move) game
