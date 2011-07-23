@@ -100,9 +100,10 @@ on tile distribution and word length"
   "Score the rack, checking validity in game dictionary, returns the new game state"
   (let [ points (rack->score game)]
     (if-not (zero? points)
-      (merge game {:rack []
-                   :history (conj (:history game) (list \S (:score game) (:rack game) ))
-                   :score (+ points (:score game))})
+      (let [ history (conj (:history game) (list \S points (:rack game) ))
+             new-score (+ points (:score game)) ]
+        (println "score-rack:" history new-score)
+        (merge game {:rack [] :history history :score new-score}))
       game)))
 
 (defn rack-full? [game]
@@ -117,7 +118,7 @@ on tile distribution and word length"
   "Append a tile from the given column to the rack. Returns the modified game"
   (let [tile (first (nth (:board game) col))
         column (vec (rest (nth (:board game) col)))]
-    (println "tile==" tile "col==" col)
+    (println "rack-tile(): tile==" tile "col==" col)
     (if (and (not (nil? tile)) (not (rack-full? game)))
       (let [rack (conj (:rack game) tile)
             history (conj (:history game) (list \M col tile) )
@@ -152,10 +153,12 @@ on tile distribution and word length"
                      (merge game {:history history
                                   :rack (vec (butlast (:rack game)))
                                   :board (assoc (:board game) column (vec (cons tile (board-col game column))))}))
-     (= \S action) (let [old-score (nth last-move 1) rack (nth last-move 2)]
-                     (merge game {:history history
-                                  :rack rack
-                                  :score old-score}))
+     ;; (= \S action) (let [points (nth last-move 1) rack (nth last-move 2)]
+     ;;                 (println "undo-move: " last-move action points rack) 
+     ;;                 (merge game {:history history
+     ;;                              :rack rack
+     ;;                              :score (- (:score game) points)}))
+     (= \S action) game
      true game)))
 
 (defn new-game []
