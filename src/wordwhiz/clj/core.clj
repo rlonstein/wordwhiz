@@ -153,12 +153,11 @@ on tile distribution and word length"
                      (merge game {:history history
                                   :rack (vec (butlast (:rack game)))
                                   :board (assoc (:board game) column (vec (cons tile (board-col game column))))}))
-     ;; (= \S action) (let [points (nth last-move 1) rack (nth last-move 2)]
-     ;;                 (println "undo-move: " last-move action points rack) 
-     ;;                 (merge game {:history history
-     ;;                              :rack rack
-     ;;                              :score (- (:score game) points)}))
-     (= \S action) game
+     (= \S action) (let [points (nth last-move 1) rack (nth last-move 2)]
+                     (println "undo-move: " last-move action points rack) 
+                     (merge game {:history history
+                                  :rack rack
+                                  :score (- (:score game) points)}))
      true game)))
 
 (defn new-game []
