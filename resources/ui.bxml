@@ -6,7 +6,7 @@
   <Border>
     <TablePane>
       <columns>
-        <TablePane.Column width="640"/>
+        <TablePane.Column width="1200"/>
         <TablePane.Column width="200"/>
       </columns>
       
