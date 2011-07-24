@@ -9,6 +9,7 @@
                  [jflac/jflac-codec "1.4.0-SNAPSHOT"]]
   :dev-dependencies [[swank-clojure "1.4.0-SNAPSHOT"]
                      [clojure-source "1.2.1"]]
+  :resources-path "resources"
 ;  :jvm-opts ["-agentlib:jdwp=transport=dt_socket,server=y,suspend=n"]
   :jar-name "wordwhiz.jar"
   :warn-on-reflection false
