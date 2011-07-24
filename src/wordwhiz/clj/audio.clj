@@ -39,8 +39,11 @@
 (defn coerce-stream-to-pcm [audio-stream]
   (if-not (is-pcm? audio-stream) (stream-to-pcm audio-stream) audio-stream))
 
-(defn get-audio-input-stream [filename]
-  (coerce-stream-to-pcm (AudioSystem/getAudioInputStream (File. filename))))
+(defn get-audio-input-stream [url]
+  (coerce-stream-to-pcm (AudioSystem/getAudioInputStream url)))
+
+;; (defn get-audio-input-stream [filename]
+;;   (coerce-stream-to-pcm (AudioSystem/getAudioInputStream (File. filename))))
 
 (defn listener-event-types []
   "Return mapping of event names to underlying implementation types"
@@ -52,9 +55,9 @@
    }
   )
 
-(defn play-sound [filename & [listener-fn event-type]]
+(defn play-sound [url & [listener-fn event-type]]
   (let [
-        stream (get-audio-input-stream filename)
+        stream (get-audio-input-stream url)
         format (. stream getFormat)
         info (DataLine$Info. Clip format)
         #^Clip clip (AudioSystem/getLine info)

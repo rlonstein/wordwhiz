@@ -62,8 +62,8 @@
 (defn get-resource [res]
   (.. (Thread/currentThread) (getContextClassLoader) (getResource res)))
 
-(defn get-resource-fn [res]
-  (.. (get-resource res) (getFile)))
+;; (defn get-resource-fn [res]
+;;   (.. (get-resource res) (getFile)))
 
 (defmulti update-widgit-image (fn [c _] (class c)))
 
@@ -295,7 +295,7 @@ relies on parsing id of widgit, returns nil on failure"
 (defn bbtn-attach-listener [btn]
   (attach-button-listener btn (fn [b]
                                 (when (not @mute)
-                                  (wordwhiz.clj.audio/play-sound (get-resource-fn "audio/twig_snap.flac")))
+                                  (wordwhiz.clj.audio/play-sound (get-resource "audio/twig_snap.flac")))
                                 (dosync
                                  (alter state wordwhiz.clj.core/rack-tile (button-to-column b)))
                                 (btn-update-rack)
@@ -305,7 +305,7 @@ relies on parsing id of widgit, returns nil on failure"
 (defn reset-attach-listener [btn]
   (attach-button-listener btn (fn [b]
                                 (when (not @mute)
-                                  (wordwhiz.clj.audio/play-sound (get-resource-fn "audio/whoosh.flac")))
+                                  (wordwhiz.clj.audio/play-sound (get-resource "audio/whoosh.flac")))
                                 (dosync (alter state wordwhiz.clj.core/reset-game))
                                 (btn-update-board)
                                 (btn-update-rack)
@@ -314,7 +314,7 @@ relies on parsing id of widgit, returns nil on failure"
 (defn score-attach-listener [btn]
   (attach-button-listener btn (fn [b]
                                 (when (not @mute)
-                                  (wordwhiz.clj.audio/play-sound (get-resource-fn "audio/mechanical2.flac")))
+                                  (wordwhiz.clj.audio/play-sound (get-resource "audio/mechanical2.flac")))
                                 (dosync (alter state wordwhiz.clj.core/score-rack))
                                 (btn-update-score)
                                 (btn-update-rack))))
@@ -322,7 +322,7 @@ relies on parsing id of widgit, returns nil on failure"
 (defn undo-attach-listener [btn]
   (attach-button-listener btn (fn [b]
                                 (when (not @mute)
-                                  (wordwhiz.clj.audio/play-sound (get-resource-fn "audio/mechanical2.flac")))
+                                  (wordwhiz.clj.audio/play-sound (get-resource "audio/mechanical2.flac")))
                                 (dosync (alter state wordwhiz.clj.core/undo-move))
                                 (btn-update-rack)
                                 (btn-update-score)
@@ -331,14 +331,13 @@ relies on parsing id of widgit, returns nil on failure"
 (defn newgame-attach-listener [btn]
   (attach-button-listener btn (fn [b]
                                 (when (not @mute)
-                                  (wordwhiz.clj.audio/play-sound (get-resource-fn "audio/toilet_flush.flac")))
+                                  (wordwhiz.clj.audio/play-sound (get-resource "audio/toilet_flush.flac")))
                                 (dosync (alter state (wordwhiz.clj.core/new-game))))))
 
 (defn quit-attach-listener [btn]
   (attach-button-listener btn (fn [b]
                                 (if (not @mute)
-                                  (wordwhiz.clj.audio/play-sound
-                                   (get-resource-fn "audio/vicki-bye.au")
+                                  (wordwhiz.clj.audio/play-sound (get-resource "audio/vicki-bye.au")
                                    (fn [e] (java.lang.System/exit 0))
                                    (:stop (wordwhiz.clj.audio/listener-event-types)))
                                   (java.lang.System/exit 0)))))
