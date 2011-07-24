@@ -143,6 +143,7 @@ Performs getName() on org.apache.pivot.wtk.Component or stringifies the object"
         target (get-named-component "rackscore")]
     (notnull! target)
     ;; TODO: set color of textinput "#CC3333" "#33CC33"
+    (.setStyles target (if-not (zero? score) "{color: '#CC3333'}" "{color: '#33CC33'}"))
     (.setText target (.toString score))))
 
 (defn update-gamescore [game]
@@ -224,6 +225,7 @@ relies on parsing id of widgit, returns nil on failure"
 (gen-class
  :name wordwhiz.clj.ui
  :implements [org.apache.pivot.wtk.Application]
+ :main true
  :init init)
 
 (defn -main [& args]
