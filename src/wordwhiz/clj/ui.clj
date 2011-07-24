@@ -111,7 +111,7 @@ Performs getName() on org.apache.pivot.wtk.Component or stringifies the object"
   (get-named-component (str "rack" "," n)))
 
 (defn char->tileimage [c]
-  (str "image/tiles/tile-" c ".png"))
+  (str "image/tiles/tile-ivory-" c ".png"))
 
 (defn update-board [game & {:keys [sleepms]}]
   (doseq [col (range 0 (:x (:board-dim game)))
