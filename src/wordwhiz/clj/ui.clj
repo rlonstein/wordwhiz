@@ -39,7 +39,7 @@
 (def uistylesheet "@styles.json")
 (def serializer (ref (org.apache.pivot.beans.BXMLSerializer.)))
 (def mute (atom false))
-(def debug (atom true))
+(def debug (atom false))
 (def state (ref (wordwhiz.clj.core/new-game)))
 
 (defmacro notnull! [v]
@@ -332,7 +332,10 @@ relies on parsing id of widgit, returns nil on failure"
   (attach-button-listener btn (fn [b]
                                 (when (not @mute)
                                   (wordwhiz.clj.audio/play-sound (get-resource "audio/toilet_flush.flac")))
-                                (dosync (alter state (wordwhiz.clj.core/new-game))))))
+                                (dosync (ref-set state (wordwhiz.clj.core/new-game)))
+                                (btn-update-rack)
+                                (btn-update-score)
+                                (btn-update-board))))
 
 (defn quit-attach-listener [btn]
   (attach-button-listener btn (fn [b]
