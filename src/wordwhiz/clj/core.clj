@@ -69,10 +69,11 @@
 
 (defn fill-board [tiles]
   "Produce a game board as a vector of vectors from the supplied collection"
-  (loop [v [] x 0]
-    (let [start (* x (:y board-dim)) end (+ start (:y board-dim))]
-      (if (> x (:x board-dim)) v
-          (recur (conj v (subvec tiles start end)) (inc x))))))
+  (let [cols (dec (:x board-dim))]
+    (loop [v [] x 0]
+      (let [start (* x (:y board-dim)) end (+ start (:y board-dim))]
+        (if (> x cols) v
+            (recur (conj v (subvec tiles start end)) (inc x)))))))
 
 (defn valid-word? [word dict]
   "Check word against the dictionary"
