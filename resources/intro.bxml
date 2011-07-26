@@ -1,0 +1,32 @@
+<!-- -*- mode: nxml; -*- -->
+<Sheet bxml:id="intro" title="How to Play"
+       xmlns:bxml="http://pivot.apache.org/bxml"
+       xmlns="org.apache.pivot.wtk">
+  <BoxPane styles="{verticalAlignment:'bottom'}">
+    <TablePane>
+      <columns>
+        <TablePane.Column width="1*"/>
+      </columns>
+      
+       <TablePane.Row height="1*">
+         <Label text="How to play Wordwhiz" styles="{horizontalAlignment: 'center'}"/>
+       </TablePane.Row>
+
+       <TablePane.Row>
+         <Label text="Click to move tiles from the top row of each column to the next available space on the rack. The score will change when a valid word is assembled."
+                preferredWidth="600" styles="{wrapText:true}"/>
+       </TablePane.Row>
+
+       <TablePane.Row>
+         <Label text="Use the buttons on the right to commit the score on the rack, undo a move, reset the existing game, start a new game or quit." preferredWidth="600" styles="{wrapText:true}"/>
+       </TablePane.Row>
+
+      <TablePane.Row height="-1">
+        <BoxPane styles="{horizontalAlignment:'center'}">
+          <PushButton buttonData="Close"
+                      ButtonPressListener.buttonPressed="intro.close()"/>
+        </BoxPane>
+      </TablePane.Row>
+    </TablePane>
+  </BoxPane>
+</Sheet>
