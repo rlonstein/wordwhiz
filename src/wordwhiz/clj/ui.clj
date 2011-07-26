@@ -30,12 +30,14 @@
                          MessageType
                          Prompt
                          PushButton
+                         Sheet
                          Window)
    (org.apache.pivot.wtk.content ButtonData)
    (org.apache.pivot.wtk.media Image
                                Picture)))
 
-(def uidescfile (. ClassLoader getSystemResource "ui.bxml"))
+(def uidescfile (wordwhiz.clj.core/get-system-resource "ui.bxml"))
+(def uiinfofile (wordwhiz.clj.core/get-system-resource "intro.bxml"))
 (def uistylesheet "@styles.json")
 (def serializer (ref (org.apache.pivot.beans.BXMLSerializer.)))
 (def mute (atom false))
@@ -236,9 +238,10 @@ relies on parsing id of widgit, returns nil on failure"
   (. DesktopApplicationContext queueCallback do-startup-board true))
 
 (defn -startup [this display props]
-  "Render a title sequence on the board"
+  "Render the ui"
   (let [ window (. @serializer readObject uidescfile) ]
-    (.open window display)))
+    (.open window display)
+    (.. (org.apache.pivot.beans.BXMLSerializer.) (readObject uiinfofile) (open display window))))
 
 (defn -resume [this])
 
@@ -313,20 +316,22 @@ relies on parsing id of widgit, returns nil on failure"
 
 (defn score-attach-listener [btn]
   (attach-button-listener btn (fn [b]
-                                (when (not @mute)
-                                  (wordwhiz.clj.audio/play-sound (get-resource "audio/mechanical2.flac")))
-                                (dosync (alter state wordwhiz.clj.core/score-rack))
-                                (btn-update-score)
-                                (btn-update-rack))))
+                                (when (not (zero? (wordwhiz.clj.core/rack->score @state)))
+                                  (when (not @mute)
+                                    (wordwhiz.clj.audio/play-sound (get-resource "audio/mechanical2.flac")))
+                                  (dosync (alter state wordwhiz.clj.core/score-rack))
+                                  (btn-update-score)
+                                  (btn-update-rack)))))
 
 (defn undo-attach-listener [btn]
   (attach-button-listener btn (fn [b]
-                                (when (not @mute)
-                                  (wordwhiz.clj.audio/play-sound (get-resource "audio/mechanical2.flac")))
-                                (dosync (alter state wordwhiz.clj.core/undo-move))
-                                (btn-update-rack)
-                                (btn-update-score)
-                                (btn-update-board))))
+                                (when (not (zero? (count (:history @state))))
+                                  (when (not @mute)
+                                    (wordwhiz.clj.audio/play-sound (get-resource "audio/mechanical2.flac")))
+                                  (dosync (alter state wordwhiz.clj.core/undo-move))
+                                  (btn-update-rack)
+                                  (btn-update-score)
+                                  (btn-update-board)))))
 
 (defn newgame-attach-listener [btn]
   (attach-button-listener btn (fn [b]

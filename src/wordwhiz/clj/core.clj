@@ -12,7 +12,11 @@
 (def board-dim {:x 12 :y 7})
 (def rack-size 16)
 (def max-word-length rack-size)
-(def dictfile (. ClassLoader getSystemResource "word.list"))
+
+(defn get-system-resource [s]
+  (. ClassLoader getSystemResource s))
+
+(def dictfile (get-system-resource "word.list"))
 
 (def debug false)
 
