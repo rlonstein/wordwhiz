@@ -216,13 +216,20 @@ relies on parsing id of widgit, returns nil on failure"
 ;;     (update-board (merge wordwhiz.clj.core/game-defaults {:board blank}) :sleepms 10)
 ;;     (update-board game)))
 
+(defn toggle-score-btn [game]
+  (.setEnabled (get-named-component "btnScore")
+               (not (zero? (wordwhiz.clj.core/rack->score game)))))
+
 (defn startup-board [game]
-  (update-board game))
+  (update-board game)
+  (toggle-score-btn game))
+
 
 (defn do-startup-board []
   "Invoke startup-board with the global game state"
   ;; TODO: maybe unneeded, trying to avoid capture of global ref
   (startup-board @state))
+
 
 (gen-class
  :name wordwhiz.clj.ui
@@ -302,6 +309,7 @@ relies on parsing id of widgit, returns nil on failure"
                                   (wordwhiz.clj.audio/play-sound (get-resource "audio/twig_snap.flac")))
                                 (dosync
                                  (alter state wordwhiz.clj.core/rack-tile (button-to-column b)))
+                                (toggle-score-btn @state)
                                 (btn-update-rack)
                                 (btn-update-board)
                                 (btn-update-score))))
@@ -321,6 +329,7 @@ relies on parsing id of widgit, returns nil on failure"
                                   (when (not @mute)
                                     (wordwhiz.clj.audio/play-sound (get-resource "audio/mechanical2.flac")))
                                   (dosync (alter state wordwhiz.clj.core/score-rack))
+                                  (toggle-score-btn @state)
                                   (btn-update-score)
                                   (btn-update-rack)))))
 
@@ -330,6 +339,7 @@ relies on parsing id of widgit, returns nil on failure"
                                   (when (not @mute)
                                     (wordwhiz.clj.audio/play-sound (get-resource "audio/mechanical2.flac")))
                                   (dosync (alter state wordwhiz.clj.core/undo-move))
+                                  (toggle-score-btn @state)
                                   (btn-update-rack)
                                   (btn-update-score)
                                   (btn-update-board)))))
@@ -339,6 +349,7 @@ relies on parsing id of widgit, returns nil on failure"
                                 (when (not @mute)
                                   (wordwhiz.clj.audio/play-sound (get-resource "audio/toilet_flush.flac")))
                                 (dosync (ref-set state (wordwhiz.clj.core/new-game)))
+                                (toggle-score-btn @state)
                                 (btn-update-rack)
                                 (btn-update-score)
                                 (btn-update-board))))

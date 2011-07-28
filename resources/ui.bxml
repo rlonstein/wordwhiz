@@ -156,7 +156,7 @@
               </BoxPane>
               <BoxPane orientation="vertical">
                 <BoxPane orientation="vertical" styles="{padding:4, horizontalAlignment:'left', verticalAlignment:'top', fill:'true'}">
-                  <ScoreButton xmlns="wordwhiz.clj.ui">
+                  <ScoreButton xmlns="wordwhiz.clj.ui" bxml:id="btnScore">
                     <content:ButtonData text="Score rack" icon="@image/icons/accept.png" />
                   </ScoreButton>
                   <UndoButton xmlns="wordwhiz.clj.ui">
