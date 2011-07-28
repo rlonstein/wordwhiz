@@ -6,10 +6,10 @@
   <Border>
     <TablePane>
       <columns>
-        <TablePane.Column width="1200"/>
+        <TablePane.Column width="800"/>
       </columns>
 
-      <TablePane.Row height="72">
+      <TablePane.Row height="52">
         <GridPane columnCount="16" styles="{showVerticalGridLines:true}">
           <GridPane.Row bxml:id="rack">
             <ImageView bxml:id="rack,0" />
@@ -32,18 +32,18 @@
         </GridPane>
       </TablePane.Row>
 
-      <TablePane.Row height="25">
+      <TablePane.Row height="15">
         <Panel/>
       </TablePane.Row>
 
       <TablePane.Row>
         <TablePane>
           <columns>
-            <TablePane.Column width="800"/>
-            <TablePane.Column width="400"/>
+            <TablePane.Column width="600"/>
+            <TablePane.Column width="200"/>
           </columns>
 
-          <TablePane.Row height="480">
+          <TablePane.Row height="360">
             <GridPane columnCount="12" bxml:id="board">
               <GridPane.Row bxml:id="row,0">
                 <BoardButton bxml:id="0,0"  xmlns="wordwhiz.clj.ui" />
@@ -148,11 +148,11 @@
             <BoxPane orientation="vertical" styles="{padding:2}">
               <BoxPane>
                 <Label text="Rack: "/>
-                <TextInput enabled="false" bxml:id="rackscore"/>
+                <TextInput enabled="false" bxml:id="rackscore" preferredWidth="64"/>
               </BoxPane>
               <BoxPane>
                 <Label text="Score:"/>
-                <TextInput enabled="false" bxml:id="score"/>
+                <TextInput enabled="false" bxml:id="score" preferredWidth="64"/>
               </BoxPane>
               <BoxPane orientation="vertical">
                 <BoxPane orientation="vertical" styles="{padding:4, horizontalAlignment:'left', verticalAlignment:'top', fill:'true'}">
