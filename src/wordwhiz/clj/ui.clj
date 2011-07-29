@@ -216,13 +216,19 @@ relies on parsing id of widgit, returns nil on failure"
 ;;     (update-board (merge wordwhiz.clj.core/game-defaults {:board blank}) :sleepms 10)
 ;;     (update-board game)))
 
+(defn set-btn-enabled [name enabled]
+  (.setEnabled (get-named-component name) enabled))
+
 (defn toggle-score-btn [game]
-  (.setEnabled (get-named-component "btnScore")
-               (not (zero? (wordwhiz.clj.core/rack->score game)))))
+  (set-btn-enabled "btnScore" (not (zero? (wordwhiz.clj.core/rack->score game)))))
+
+(defn toggle-undo-btn [game]
+  (set-btn-enabled "btnUndo" (not (nil? (first (:history game))))))
 
 (defn startup-board [game]
   (update-board game)
-  (toggle-score-btn game))
+  (toggle-score-btn game)
+  (toggle-undo-btn game))
 
 
 (defn do-startup-board []
@@ -241,7 +247,6 @@ relies on parsing id of widgit, returns nil on failure"
   "Entry point for application-style (desktop) execution"
   (. DesktopApplicationContext applyStylesheet uistylesheet)
   (. DesktopApplicationContext main wordwhiz.clj.ui (into-array String args))
-  (Thread/sleep 1000)
   (. DesktopApplicationContext queueCallback do-startup-board true))
 
 (defn -startup [this display props]
@@ -310,6 +315,7 @@ relies on parsing id of widgit, returns nil on failure"
                                 (dosync
                                  (alter state wordwhiz.clj.core/rack-tile (button-to-column b)))
                                 (toggle-score-btn @state)
+                                (toggle-undo-btn @state)
                                 (btn-update-rack)
                                 (btn-update-board)
                                 (btn-update-score))))
@@ -321,7 +327,9 @@ relies on parsing id of widgit, returns nil on failure"
                                 (dosync (alter state wordwhiz.clj.core/reset-game))
                                 (btn-update-board)
                                 (btn-update-rack)
-                                (btn-update-score))))
+                                (btn-update-score)
+                                (toggle-score-btn @state)
+                                (toggle-undo-btn @state))))
 
 (defn score-attach-listener [btn]
   (attach-button-listener btn (fn [b]
@@ -340,6 +348,7 @@ relies on parsing id of widgit, returns nil on failure"
                                     (wordwhiz.clj.audio/play-sound (get-resource "audio/mechanical2.flac")))
                                   (dosync (alter state wordwhiz.clj.core/undo-move))
                                   (toggle-score-btn @state)
+                                  (toggle-undo-btn @state)
                                   (btn-update-rack)
                                   (btn-update-score)
                                   (btn-update-board)))))

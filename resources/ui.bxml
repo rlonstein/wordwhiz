@@ -159,7 +159,7 @@
                   <ScoreButton xmlns="wordwhiz.clj.ui" bxml:id="btnScore">
                     <content:ButtonData text="Score rack" icon="@image/icons/accept.png" />
                   </ScoreButton>
-                  <UndoButton xmlns="wordwhiz.clj.ui">
+                  <UndoButton xmlns="wordwhiz.clj.ui" bxml:id="btnUndo">
                     <content:ButtonData text="Undo move" icon="@image/icons/arrow_undo.png" />
                   </UndoButton>
                 </BoxPane>
