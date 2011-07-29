@@ -146,14 +146,20 @@
             </GridPane>
 
             <BoxPane orientation="vertical" styles="{padding:2}">
-              <BoxPane>
-                <Label text="Rack: "/>
-                <TextInput enabled="false" bxml:id="rackscore" preferredWidth="64"/>
-              </BoxPane>
-              <BoxPane>
-                <Label text="Score:"/>
-                <TextInput enabled="false" bxml:id="score" preferredWidth="64"/>
-              </BoxPane>
+              <TablePane>
+                <columns>
+                  <TablePane.Column width="50"/>
+                  <TablePane.Column width="100"/>
+                </columns>
+                <TablePane.Row>
+                  <Label text="Score: "/>
+                  <TextInput enabled="false" bxml:id="rackscore"/>
+                </TablePane.Row>
+                <TablePane.Row>
+                  <Label text="Total:"/>
+                  <TextInput enabled="false" bxml:id="score"/>
+                </TablePane.Row>
+              </TablePane>
               <BoxPane orientation="vertical">
                 <BoxPane orientation="vertical" styles="{padding:4, horizontalAlignment:'left', verticalAlignment:'top', fill:'true'}">
                   <ScoreButton xmlns="wordwhiz.clj.ui" bxml:id="btnScore">
