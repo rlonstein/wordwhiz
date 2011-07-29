@@ -144,9 +144,17 @@ on tile distribution and word length"
                :score (:score game-defaults)
                :history (:history game-defaults)}))
 
+(defn num-tiles [board]
+  "Return the count of remaining tiles on the board"
+  (reduce + (map count board)))
+
 (defn board-col [game col]
   "Return the specified column from the board"
   (get (:board game) col))
+
+(defn force-resign? [game]
+  "Check if the current game has a playable number of tiles left, returns boolean"
+  (> 2 (num-tiles (:board game))))
 
 (defn undo-move [game]
   "Rewind actions from the game history"
