@@ -251,10 +251,10 @@ relies on parsing id of widgit, returns nil on failure"
 
 (defn -startup [this display props]
   "Render the ui"
-  (let [ window (. @serializer readObject uidescfile) ]
-    (.setPreferredSize window 800 468)
-    (.open window display)
-    (.. (org.apache.pivot.beans.BXMLSerializer.) (readObject uiinfofile) (open display window))))
+  (dosync (ref-set window (. @serializer readObject uidescfile)))
+  (.setPreferredSize @window 800 468)
+  (.open @window display)
+  (.. (org.apache.pivot.beans.BXMLSerializer.) (readObject uiinfofile) (open display @window)))
 
 (defn -resume [this])
 
