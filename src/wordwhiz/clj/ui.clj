@@ -67,15 +67,11 @@
 (defn get-resource [res]
   (.. (Thread/currentThread) (getContextClassLoader) (getResource res)))
 
-;; (defn get-resource-fn [res]
-;;   (.. (get-resource res) (getFile)))
-
 (defmulti update-widgit-image (fn [c _] (class c)))
 
 (defmethod update-widgit-image org.apache.pivot.wtk.Button [widgit url]
   (notnull! widgit)
   (notnull! url)
-  ;; (println "update-widgit-image" widgit url)
   (let [ bdata (.getButtonData widgit)
          icon  (get-resource url) ]
     (when (nil? bdata) (.setButtonData widgit (org.apache.pivot.wtk.content.ButtonData.)))
@@ -103,8 +99,6 @@ Performs getName() on org.apache.pivot.wtk.Component or stringifies the object"
   (let [name (if (instance? org.apache.pivot.wtk.Component c) (.getName c) (.toString c))
         ns (dosync (.getNamespace @serializer))
         component (.get ns name)]
-    ;; (printf "get-named-component(%s):\n\tname==\"%s\"\tcomponent==%s\n" c name component)
-    ;; (debug-iterate-ns ns)
     (notnull! component)
     component))
 
@@ -126,7 +120,6 @@ Performs getName() on org.apache.pivot.wtk.Component or stringifies the object"
     (let [tile (wordwhiz.clj.core/tile-at (:board game) col row)
           tile-img (char->tileimage tile)
           widgit (get-widgit-at row col)]
-      ;;      (when @debug (println "update-board():" row col tile tile-img widgit))
       (when sleepms (Thread/sleep sleepms))
       (notnull! tile-img)
       (notnull! widgit)
@@ -139,7 +132,6 @@ Performs getName() on org.apache.pivot.wtk.Component or stringifies the object"
     (let [letter (wordwhiz.clj.core/rack-nth idx game)
           tile-img (char->tileimage letter)
           widgit (get-nth-rack-widgit idx)]
-      ;; (println "debug: update-rack()" letter tile-img)
       (update-widgit-image widgit tile-img))))
 
 (defn get-score-style [game]
@@ -173,40 +165,6 @@ relies on parsing id of widgit, returns nil on failure"
   (try
     (Integer/parseInt (nth (clojure.string/split (. btn getName) #",") 1))
     (catch NumberFormatException e)))
-
-;; (defn startup-board [game]
-;;   "Render a title sequence on the board"
-;;   ;;FIXME: this doesn't work because the ui updated asynchronously
-;;   (notnull! game)
-;;   (let [blank [ ["space" "space" "space" "space" "space" "space" "space"]
-;;                 ["space" "space" "space" "space" "space" "space" "space"]
-;;                 ["space" "space" "space" "space" "space" "space" "space"]
-;;                 ["space" "space" "space" "space" "space" "space" "space"]
-;;                 ["space" "space" "space" "space" "space" "space" "space"]
-;;                 ["space" "space" "space" "space" "space" "space" "space"]
-;;                 ["space" "space" "space" "space" "space" "space" "space"]
-;;                 ["space" "space" "space" "space" "space" "space" "space"]
-;;                 ["space" "space" "space" "space" "space" "space" "space"]
-;;                 ["space" "space" "space" "space" "space" "space" "space"]
-;;                 ["space" "space" "space" "space" "space" "space" "space"]
-;;                 ["space" "space" "space" "space" "space" "space" "space"] ]
-;;         title [ ["space" "space" "space" "space" "space" "space" "space"]
-;;                 ["space" "space" "space" "space" "T" "space" "R"]
-;;                 ["space" "W" "space" "space" "I" "space" "space"]
-;;                 ["space" "O" "space" "L" "L" "space" "L"]
-;;                 ["space" "R" "space" "E" "E" "space" "O"]
-;;                 ["space" "D" "space" "T" "space" "space" "N"]
-;;                 ["space" "W" "space" "T" "G" "space" "S"]
-;;                 ["space" "H" "space" "E" "A" "space" "T"]
-;;                 ["space" "I" "space" "R" "M" "space" "E"]
-;;                 ["space" "Z" "space" "space" "E" "space" "I"]
-;;                 ["space" "space" "space" "space" "space" "space" "N"]
-;;                 ["space" "space" "space" "space" "space" "space" "space"] ]
-;;         ]
-;;     (update-board (merge wordwhiz.clj.core/game-defaults {:board title}) :sleepms 10)
-;;     (Thread/sleep 1000)
-;;     (update-board (merge wordwhiz.clj.core/game-defaults {:board blank}) :sleepms 10)
-;;     (update-board game)))
 
 (defn set-btn-enabled [name enabled]
   (.setEnabled (get-named-component name) enabled))
@@ -258,8 +216,6 @@ relies on parsing id of widgit, returns nil on failure"
 (defn -shutdown [this optional]
    false)
 
-;; (defn -init []
-;; [ [] (atom []) ])
 
 (gen-class
  :name wordwhiz.clj.ui.BoardButton
