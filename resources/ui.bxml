@@ -153,11 +153,11 @@
                 </columns>
                 <TablePane.Row>
                   <Label text="Score: "/>
-                  <TextInput enabled="false" bxml:id="rackscore"/>
+                  <Label text="0" bxml:id="rackscore"/>
                 </TablePane.Row>
                 <TablePane.Row>
                   <Label text="Total:"/>
-                  <TextInput enabled="false" bxml:id="score"/>
+                  <Label text="0" bxml:id="score"/>
                 </TablePane.Row>
               </TablePane>
               <BoxPane orientation="vertical">
