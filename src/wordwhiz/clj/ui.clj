@@ -140,20 +140,28 @@ Performs getName() on org.apache.pivot.wtk.Component or stringifies the object"
       ;; (println "debug: update-rack()" letter tile-img)
       (update-widgit-image widgit tile-img))))
 
+(defn get-score-style [game]
+  "Return a pivot style for the score ui element based on game state"
+  (let [color {:normal "#000000" :bad "#CC3333" :good "#33CC33"}]
+    (format "{color: '%S'}" (cond (nil? (first (:rack game))) (:normal color)
+                                  (zero? (wordwhiz.clj.core/rack->score game)) (:bad color)
+                                  true (:good color)))))
+
 (defn update-rackscore [game]
+  "Modify the rack score ui elements"
   (notnull! game)
-  (let [score (wordwhiz.clj.core/rack->score game)
-        target (get-named-component "rackscore")]
+  (let [target (get-named-component "rackscore")]
     (notnull! target)
-    ;; TODO: set color of textinput "#CC3333" "#33CC33"
-    (.setStyles target (if-not (zero? score) "{color: '#CC3333'}" "{color: '#33CC33'}"))
-    (.setText target (.toString score))))
+    (.setStyles target (get-score-style game))
+    (.setText target (.toString (wordwhiz.clj.core/rack->score game)))))
 
 (defn update-gamescore [game]
+  "Modify the game score ui element"
   (notnull! game)
   (.setText (get-named-component "score") (.toString (:score game))))
 
 (defn update-score [game]
+  "Modify the ui elements for scores"
   (update-rackscore game)
   (update-gamescore game))
 
