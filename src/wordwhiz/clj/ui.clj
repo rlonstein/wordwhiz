@@ -40,6 +40,7 @@
 (def uiinfofile (wordwhiz.clj.core/get-system-resource "intro.bxml"))
 (def uistylesheet "@styles.json")
 (def serializer (ref (org.apache.pivot.beans.BXMLSerializer.)))
+(def window (ref nil))
 (def mute (atom false))
 (def debug (atom false))
 (def state (ref (wordwhiz.clj.core/new-game)))
@@ -240,8 +241,7 @@ relies on parsing id of widgit, returns nil on failure"
 (gen-class
  :name wordwhiz.clj.ui
  :implements [org.apache.pivot.wtk.Application]
- :main true
- :init init)
+ :main true)
 
 (defn -main [& args]
   "Entry point for application-style (desktop) execution"
@@ -263,8 +263,8 @@ relies on parsing id of widgit, returns nil on failure"
 (defn -shutdown [this optional]
    false)
 
-(defn -init []
-  [ [] (atom []) ])
+;; (defn -init []
+;; [ [] (atom []) ])
 
 (gen-class
  :name wordwhiz.clj.ui.BoardButton
