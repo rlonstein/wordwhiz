@@ -1,0 +1,16 @@
+<!-- -*- mode: nxml; -*- -->
+<Sheet bxml:id="win" title="Congratulations!"
+       xmlns:bxml="http://pivot.apache.org/bxml"
+       xmlns="org.apache.pivot.wtk">
+  <BoxPane styles="{verticalAlignment:'bottom'}">
+    <TablePane>
+      <columns>
+        <TablePane.Column width="1*"/>
+      </columns>
+      
+       <TablePane.Row height="1*">
+         <Label text="Great job! You won!" styles="{horizontalAlignment: 'center' verticalAlignment: 'center'}"/>
+       </TablePane.Row>
+    </TablePane>
+  </BoxPane>
+</Sheet>
