@@ -13,9 +13,9 @@
        </TablePane.Row>
 
        <TablePane.Row>
-         <Label text="Click a tile on the top row of each column to move it the next available space on the rack. The score will change when a valid word is assembled. Click the 'score' button to add the score to your total and clear the rack. Play continues until no tiles remain or no valid word can be made."
-                preferredWidth="600" styles="{wrapText:true}"/>
+         <Label text="The object of the game is to assemble words from the letter tiles on the board to achieve the highest possible score. Only the tiles at the top of the column can move to the rack above. Click a tile on the top row of each column to move it the next available space on the rack. The remaining tiles in the column will move up until none are left. Click the 'score' button to add the score to your total and clear the rack. Play continues until no tiles remain or no valid word can be made." preferredWidth="600" styles="{wrapText:true}"/>
        </TablePane.Row>
+
 
        <TablePane.Row>
          <Label text="Use the buttons on the right to score the rack, undo a move, reset the existing game, start a new game or quit." preferredWidth="600" styles="{wrapText:true}"/>
