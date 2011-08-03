@@ -144,13 +144,27 @@ on tile distribution and word length"
                :score (:score game-defaults)
                :history (:history game-defaults)}))
 
+(defn board-col [game col]
+  "Return the specified column from the board"
+  (get (:board game) col))
+
 (defn num-tiles [board]
   "Return the count of remaining tiles on the board"
   (reduce + (map count board)))
 
-(defn board-col [game col]
-  "Return the specified column from the board"
-  (get (:board game) col))
+(defn open-tiles [board]
+  "Return a set containing the tiles at the top row of the board"
+  (remove nil? (map first board)))
+
+(defn no-tiles-left? [game]
+  "Return true if there are no tiles remaining on top row of the board"
+  (zero? (count (open-tiles (:board game)))))
+
+(defn valid-words-exist? [game]
+  ;;FIXME: generate the permutations of the letters in the top row
+  ;; and look them up in the dictionary, stopping at the first valid
+  ;; word
+  )
 
 (defn force-resign? [game]
   "Check if the current game has a playable number of tiles left, returns boolean"

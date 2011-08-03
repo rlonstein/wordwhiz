@@ -9,8 +9,16 @@
       </columns>
       
        <TablePane.Row height="1*">
-         <Label text="Great job! You won!" styles="{horizontalAlignment: 'center' verticalAlignment: 'center'}"/>
+         <Label text="Great job! You won!" styles="{horizontalAlignment: 'center', verticalAlignment: 'center'}"/>
        </TablePane.Row>
+
+       <TablePane.Row height="-1">
+         <BoxPane styles="{horizontalAlignment:'center'}">
+           <PushButton buttonData="Close"
+                       ButtonPressListener.buttonPressed="win.close()"/>
+         </BoxPane>
+       </TablePane.Row>
+
     </TablePane>
   </BoxPane>
 </Sheet>

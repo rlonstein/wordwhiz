@@ -31,6 +31,7 @@
                          Prompt
                          PushButton
                          Sheet
+                         SheetCloseListener
                          Window)
    (org.apache.pivot.wtk.content ButtonData)
    (org.apache.pivot.wtk.media Image
@@ -177,9 +178,21 @@ relies on parsing id of widgit, returns nil on failure"
 
 (defn startup-board [game]
   (update-board game)
+  (update-rack game)
+  (update-score game)
   (toggle-score-btn game)
   (toggle-undo-btn game))
 
+(defn game-won []
+  (.. (org.apache.pivot.beans.BXMLSerializer.)
+      (readObject (wordwhiz.clj.core/get-system-resource (:win uifiles)))
+      (open (.getDisplay @window) @window
+            (proxy [SheetCloseListener] []
+              (sheetClosed [s]
+                (dosync (ref-set state (wordwhiz.clj.core/new-game)))
+                (startup-board @state)))))
+  (when (not @mute)
+    (wordwhiz.clj.audio/play-sound (get-resource "audio/cheer.flac"))))
 
 (defn do-startup-board []
   "Invoke startup-board with the global game state"
@@ -296,7 +309,8 @@ relies on parsing id of widgit, returns nil on failure"
                                   (doto @state
                                     (toggle-score-btn)
                                     (update-score)
-                                    (update-rack))))))
+                                    (update-rack))
+                                  (when (wordwhiz.clj.core/no-tiles-left? @state) (game-won))))))
 
 (defn undo-attach-listener [btn]
   "post-init for 'UndoButton', attaches action func"  
