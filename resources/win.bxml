@@ -12,6 +12,10 @@
          <Label text="Great job! You won!" styles="{horizontalAlignment: 'center', verticalAlignment: 'center'}"/>
        </TablePane.Row>
 
+       <TablePane.Row height="1*">
+         <Label bxml:id="metrics" styles="{horizontalAlignment: 'center', verticalAlignment: 'center'}"/>
+       </TablePane.Row>
+
        <TablePane.Row height="-1">
          <BoxPane styles="{horizontalAlignment:'center'}">
            <PushButton buttonData="Close"

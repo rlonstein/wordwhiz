@@ -7,7 +7,8 @@
 
 (ns wordwhiz.clj.ui
   (:require wordwhiz.clj.core
-            wordwhiz.clj.audio)
+            wordwhiz.clj.audio
+            wordwhiz.clj.score)
   (:import
    (java.net URL)
    (org.apache.pivot)
@@ -43,6 +44,7 @@
               :lose "game-over.bxml"})
 (def uistylesheet "@styles.json")
 (def serializer (ref (org.apache.pivot.beans.BXMLSerializer.)))
+(def metrics (ref (struct wordwhiz.clj.score/metrics)))
 (def window (ref nil))
 (def mute (atom false))
 (def debug (atom false))
@@ -184,15 +186,17 @@ relies on parsing id of widgit, returns nil on failure"
   (toggle-undo-btn game))
 
 (defn game-won []
-  (.. (org.apache.pivot.beans.BXMLSerializer.)
-      (readObject (wordwhiz.clj.core/get-system-resource (:win uifiles)))
-      (open (.getDisplay @window) @window
-            (proxy [SheetCloseListener] []
-              (sheetClosed [s]
-                (dosync (ref-set state (wordwhiz.clj.core/new-game)))
-                (startup-board @state)))))
-  (when (not @mute)
-    (wordwhiz.clj.audio/play-sound (get-resource "audio/cheer.flac"))))
+  (let [serializer (org.apache.pivot.beans.BXMLSerializer.)
+        dialog (.. serializer (readObject (wordwhiz.clj.core/get-system-resource (:win uifiles))))
+        label-metrics (.get (.getNamespace serializer) "metrics")]
+    (.setText label-metrics (str "Score: " (:score @state)))
+    (.open dialog (.getDisplay @window) @window
+           (proxy [SheetCloseListener] []
+             (sheetClosed [s]
+               (dosync (ref-set state (wordwhiz.clj.core/new-game)))
+               (startup-board @state))))
+    (when (not @mute)
+      (wordwhiz.clj.audio/play-sound (get-resource "audio/cheer.flac")))))
 
 (defn do-startup-board []
   "Invoke startup-board with the global game state"
