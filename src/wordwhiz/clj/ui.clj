@@ -47,19 +47,19 @@
 (def metrics (ref (struct wordwhiz.clj.score/metrics)))
 (def window (ref nil))
 (def mute (atom false))
-(def debug (atom false))
+;;(def debug (atom false))
 (def state (ref (wordwhiz.clj.core/new-game)))
 
 (defmacro notnull! [v]
   "convenience macro for liberally asserting not null"
   `(assert (not (nil? ~v))))
 
-(defn debug-game-state [game]
-  (when @debug
-    (println "debug-game-state()" )
-    (doseq [ k [:rack :board :score :board-dim :history :rack-size :playing] ]
-      (println "\t" k (k game)))
-    (println "\t :dictionary" (count (:dictionary game)))))
+;; (defn debug-game-state [game]
+;;   (when @debug
+;;     (println "debug-game-state()" )
+;;     (doseq [ k [:rack :board :score :board-dim :history :rack-size :playing] ]
+;;       (println "\t" k (k game)))
+;;     (println "\t :dictionary" (count (:dictionary game)))))
 
 (defn attach-button-listener [btn f]
   (.. btn
@@ -356,4 +356,5 @@ relies on parsing id of widgit, returns nil on failure"
   (attach-button-listener btn (fn [b]
                                 (let [ id (. b getName)]
                                   (cond (= id "btnMute") (reset! mute (not @mute))
-                                        (= id "btnDebug") (reset! debug (not @debug)))))))
+                                        ;; (= id "btnDebug") (reset! debug (not @debug))
+                                        )))))

@@ -193,9 +193,6 @@
           <Checkbox bxml:id="btnMute" xmlns="wordwhiz.clj.ui">
             <content:ButtonData text="Mute"/>
           </Checkbox>
-          <Checkbox bxml:id="btnDebug" xmlns="wordwhiz.clj.ui">
-            <content:ButtonData text="Debug"/>
-          </Checkbox>
         </BoxPane>
       </TablePane.Row>
     </TablePane>

@@ -18,7 +18,7 @@
 
 (def dictfile (get-system-resource "word.list"))
 
-(def debug false)
+;;(def debug false)
 
 (def tile-distr
   { \E {:value 1 :frequency 12}
@@ -109,7 +109,7 @@ on tile distribution and word length"
     (if-not (zero? points)
       (let [ history (conj (:history game) (list \S points (:rack game) ))
              new-score (+ points (:score game)) ]
-        (when debug (println "score-rack:" history new-score))
+;;        (when debug (println "score-rack:" history new-score))
         (merge game {:rack [] :history history :score new-score}))
       game)))
 
@@ -125,7 +125,7 @@ on tile distribution and word length"
   "Append a tile from the given column to the rack. Returns the modified game"
   (let [tile (first (nth (:board game) col))
         column (vec (rest (nth (:board game) col)))]
-    (when debug (println "rack-tile(): tile==" tile "col==" col))
+;;    (when debug (println "rack-tile(): tile==" tile "col==" col))
     (if (and (not (nil? tile)) (not (rack-full? game)))
       (let [rack (conj (:rack game) tile)
             history (conj (:history game) (list \M col tile) )
@@ -178,12 +178,12 @@ on tile distribution and word length"
     (cond
      (nil? last-move) game
      (= \M action) (let [tile (nth last-move 2) column (nth last-move 1)]
-                     (when debug (println "undo-move: " last-move action tile column))
+;;                     (when debug (println "undo-move: " last-move action tile column))
                      (merge game {:history history
                                   :rack (vec (butlast (:rack game)))
                                   :board (assoc (:board game) column (vec (cons tile (board-col game column))))}))
      (= \S action) (let [points (nth last-move 1) rack (nth last-move 2)]
-                     (when debug (println "undo-move: " last-move action points rack)) 
+;;                     (when debug (println "undo-move: " last-move action points rack)) 
                      (merge game {:history history
                                   :rack rack
                                   :score (- (:score game) points)}))
