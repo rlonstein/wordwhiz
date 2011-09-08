@@ -1,4 +1,4 @@
-(defproject wordwhiz.clj "0.0.1-SNAPSHOT"
+(defproject wordwhiz.clj "0.1.0-SNAPSHOT"
   :description "Wordwhiz - A letter tile game"
   :license {:name "MIT License"
             :url "http://www.opensource.org/licenses/mit-license.php"}
