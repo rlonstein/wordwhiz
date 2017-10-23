@@ -20,6 +20,10 @@
                                 LineUnavailableException)
            (org.jflac FLACDecoder)))
 
+(def mute (atom false))
+
+(defn toggle-mute []
+  (reset! mute (not @mute)))
 
 (defn is-pcm? [audio-stream]
   (= (.. audio-stream (getFormat) (getEncoding)) AudioFormat$Encoding/PCM_SIGNED))
@@ -56,16 +60,15 @@
   )
 
 (defn play-sound [url & [listener-fn event-type]]
-  (let [
-        stream (get-audio-input-stream url)
-        format (. stream getFormat)
-        info (DataLine$Info. Clip format)
-        #^Clip clip (AudioSystem/getLine info)
-        ]
-    (if-not (nil? listener-fn)
-      (. clip addLineListener (proxy [LineListener] []
-                                (update [event]
-                                  (if (= (. event getType) event-type)
-                                    (listener-fn event))))))
-    (.open clip stream)
-    (.start clip)))
+  (if-not @mute
+    (let [stream (get-audio-input-stream url)
+          format (. stream getFormat)
+          info (DataLine$Info. Clip format)
+          #^Clip clip (AudioSystem/getLine info)]
+      (if-not (nil? listener-fn)
+        (. clip addLineListener (proxy [LineListener] []
+                                  (update [event]
+                                    (if (= (. event getType) event-type)
+                                      (listener-fn event))))))
+      (.open clip stream)
+      (.start clip))))
