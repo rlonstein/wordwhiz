@@ -18,7 +18,7 @@
                                 LineEvent$Type
                                 LineListener
                                 LineUnavailableException)
-           (org.kc7bfi.jflac FLACDecoder)))
+           (org.jflac FLACDecoder)))
 
 
 (defn is-pcm? [audio-stream]
