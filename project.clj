@@ -3,7 +3,6 @@
   :license {:name "MIT License"
             :url "http://www.opensource.org/licenses/mit-license.php"}
   :dependencies [
-		 [org.clojure/clojure-contrib "1.2.0"]
                  [org.clojure/clojure "1.8.0"]
                  [org.clojure/java.jdbc "0.7.3"]
                  [org.xerial/sqlite-jdbc "3.20.1"]
