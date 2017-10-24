@@ -7,16 +7,20 @@
 
 (ns wordwhiz.clj.core
   (:require (clojure.java.io)
+            [clojure.java.jdbc :as jdbc]
             [clojure.string :as str]))
 
 (def board-dim {:x 12 :y 7})
 (def rack-size 16)
 (def max-word-length rack-size)
 
-(defn get-system-resource [s]
-  (. ClassLoader getSystemResource s))
+;; (defn get-system-resource [s]
+;; (. ClassLoader getSystemResource s))
 
-(def dictfile (get-system-resource "word.list"))
+(defn get-system-resource [s]
+  (clojure.java.io/resource s))
+
+;;(def dictfile (get-system-resource "word.list"))
 
 ;;(def debug false)
 
@@ -50,12 +54,12 @@
   )    ;; Scrabble(tm) also (\SPACE 0 2)
 
 
-(defstruct game-state :tiles :history :score :board :rack :dictionary :playing :board-dim)
+(defstruct game-state :tiles :history :score :board :rack :playing :board-dim)
 
-(defn read-dict [fn]
-  "Read a wordlist from a file, returning the newly created set"
-  (with-open [reader (clojure.java.io/reader fn)]
-    (set (map #(.toUpperCase %) (line-seq reader)))))
+;; (defn read-dict [fn]
+;; "Read a wordlist from a file, returning the newly created set"
+;; (with-open [reader (clojure.java.io/reader fn)]
+;; (set (map #(.toUpperCase %) (line-seq reader)))))
 
 (def game-defaults {:tiles []
                     :history ()
@@ -64,8 +68,7 @@
                     :board-dim board-dim
                     :rack []
                     :rack-size rack-size
-                    :playing true
-                    :dictionary (read-dict dictfile)})
+                    :playing true})
 
 (defn tileset []
   "Return a shuffled set of letters (tiles)"
@@ -81,9 +84,12 @@
         (if (> x cols) v
             (recur (conj v (subvec tiles start end)) (inc x)))))))
 
-(defn valid-word? [word dict]
+(defn valid-word? [word]
   "Check word against the dictionary"
-  (contains? dict (.toUpperCase word)))
+  (let [db-str (str "jdbc:sqlite::resource:" (get-system-resource "words.db.sqlite"))
+        sql "SELECT COUNT(*) as found FROM dictionary WHERE word = ? LIMIT 1"
+        word (.toLowerCase word)]
+    (not (zero? (:found (first (jdbc/query db-str [sql word])))))))
 
 (defn score-word [w]
   "Tally the values of the letters in a word based
@@ -98,7 +104,7 @@ on tile distribution and word length"
 (defn rack->score [game]
   "Return the current score for the game rack, zero if invalid"
   (let [word (rack->string game)]
-    (if (and (valid-word? word (:dictionary game))
+    (if (and (valid-word? word)
              (>= (count word) 2))
       (score-word word)
       0)))
