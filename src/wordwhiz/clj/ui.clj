@@ -282,7 +282,7 @@ relies on parsing id of widgit, returns nil on failure"
 (defn bbtn-attach-listener [btn]
   "post-init for 'BoardButton', attaches action func"
   (attach-button-listener btn (fn [b]
-                                (wordwhiz.clj.audio/play-sound (get-resource "audio/twig_snap.ogg"))
+                                (wordwhiz.clj.audio/play-sound (get-resource "audio/wooden_ball.ogg"))
                                 (dosync
                                  (alter state wordwhiz.clj.core/rack-tile (button-to-column b)))
                                 (doto @state
