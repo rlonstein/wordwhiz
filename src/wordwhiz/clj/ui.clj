@@ -7,8 +7,7 @@
 
 (ns wordwhiz.clj.ui
   (:require wordwhiz.clj.core
-            wordwhiz.clj.audio
-            wordwhiz.clj.score)
+            wordwhiz.clj.audio)
   (:import
    (java.net URL)
    (org.apache.pivot)
@@ -44,7 +43,6 @@
               :lose "game-over.bxml"})
 (def uistylesheet "@styles.json")
 (def serializer (ref (org.apache.pivot.beans.BXMLSerializer.)))
-(def metrics (ref (struct wordwhiz.clj.score/metrics)))
 (def window (ref nil))
 ;;(def debug (atom false))
 (def state (ref (wordwhiz.clj.core/new-game)))
