@@ -199,7 +199,7 @@ relies on parsing id of widgit, returns nil on failure"
              (sheetClosed [s]
                (dosync (ref-set state (wordwhiz.clj.core/new-game)))
                (startup-board @state))))
-    (wordwhiz.clj.audio/play-sound (get-resource "audio/cheer.flac"))))
+    (wordwhiz.clj.audio/play-sound (get-resource "audio/cheer.ogg"))))
 
 (defn do-startup-board []
   "Invoke startup-board with the global game state"
@@ -282,7 +282,7 @@ relies on parsing id of widgit, returns nil on failure"
 (defn bbtn-attach-listener [btn]
   "post-init for 'BoardButton', attaches action func"
   (attach-button-listener btn (fn [b]
-                                (wordwhiz.clj.audio/play-sound (get-resource "audio/twig_snap.flac"))
+                                (wordwhiz.clj.audio/play-sound (get-resource "audio/twig_snap.ogg"))
                                 (dosync
                                  (alter state wordwhiz.clj.core/rack-tile (button-to-column b)))
                                 (doto @state
@@ -295,7 +295,7 @@ relies on parsing id of widgit, returns nil on failure"
 (defn reset-attach-listener [btn]
   "post-init for 'ResetButton', attaches action func"
   (attach-button-listener btn (fn [b]
-                                (wordwhiz.clj.audio/play-sound (get-resource "audio/whoosh.flac"))
+                                (wordwhiz.clj.audio/play-sound (get-resource "audio/whoosh.ogg"))
                                 (dosync (alter state wordwhiz.clj.core/reset-game))
                                 (doto @state
                                   (update-board)
@@ -308,7 +308,7 @@ relies on parsing id of widgit, returns nil on failure"
   "post-init for 'ScoreButton', attaches action func"
   (attach-button-listener btn (fn [b]
                                 (when (not (zero? (wordwhiz.clj.core/rack->score @state)))
-                                  (wordwhiz.clj.audio/play-sound (get-resource "audio/mechanical2.flac"))
+                                  (wordwhiz.clj.audio/play-sound (get-resource "audio/mechanical2.ogg"))
                                   (dosync (alter state wordwhiz.clj.core/score-rack))
                                   (doto @state
                                     (toggle-score-btn)
@@ -320,7 +320,7 @@ relies on parsing id of widgit, returns nil on failure"
   "post-init for 'UndoButton', attaches action func"  
   (attach-button-listener btn (fn [b]
                                 (when (not (zero? (count (:history @state))))
-                                  (wordwhiz.clj.audio/play-sound (get-resource "audio/mechanical2.flac"))
+                                  (wordwhiz.clj.audio/play-sound (get-resource "audio/mechanical2.ogg"))
                                   (dosync (alter state wordwhiz.clj.core/undo-move))
                                   (doto @state
                                     (toggle-score-btn)
@@ -332,7 +332,7 @@ relies on parsing id of widgit, returns nil on failure"
 (defn newgame-attach-listener [btn]
   "post-init for 'NewGameButton', attaches action func"
   (attach-button-listener btn (fn [b]
-                                (wordwhiz.clj.audio/play-sound (get-resource "audio/toilet_flush.flac"))
+                                (wordwhiz.clj.audio/play-sound (get-resource "audio/toilet_flush.ogg"))
                                 (dosync (ref-set state (wordwhiz.clj.core/new-game)))
                                 (doto @state
                                   (toggle-score-btn)
@@ -343,7 +343,7 @@ relies on parsing id of widgit, returns nil on failure"
 (defn quit-attach-listener [btn]
   "post-init for 'QuitButton', attaches action func"
   (attach-button-listener btn (fn [b]
-                                (wordwhiz.clj.audio/play-sound (get-resource "audio/vicki-bye.au")
+                                (wordwhiz.clj.audio/play-sound (get-resource "audio/vicki-bye.ogg")
                                    (fn [e] (java.lang.System/exit 0))
                                    (:stop (wordwhiz.clj.audio/listener-event-types))))))
 

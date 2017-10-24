@@ -7,15 +7,14 @@
                  [org.clojure/clojure "1.8.0"]
                  [org.clojure/java.jdbc "0.7.3"]
                  [org.xerial/sqlite-jdbc "3.20.1"]
-                 [org.jflac/jflac-codec "1.5.2"]
+                 [com.github.trilarion/vorbis-support "1.1.0"]
+                 [com.googlecode.soundlibs/mp3spi "1.9.5.4"]
                  [org.apache.pivot/pivot-core "2.0.5"]
                  [org.apache.pivot/pivot-wtk "2.0.5"]
                  [org.apache.pivot/pivot-wtk-terra "2.0.5"]]
   :dev-dependencies [[clojure-source "1.8.0"]]
   :resources-path "resources"
-;  :jvm-opts ["-agentlib:jdwp=transport=dt_socket,server=y,suspend=n"]
   :jar-name "wordwhiz.jar"
   :warn-on-reflection false
   :main wordwhiz.clj.ui
-  :aot [wordwhiz.clj.ui
-        wordwhiz.clj.core])
+  :aot [wordwhiz.clj.ui])

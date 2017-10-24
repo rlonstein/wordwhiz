@@ -17,8 +17,7 @@
                                 LineEvent
                                 LineEvent$Type
                                 LineListener
-                                LineUnavailableException)
-           (org.jflac FLACDecoder)))
+                                LineUnavailableException)))
 
 (def mute (atom false))
 
@@ -31,17 +30,19 @@
 (defn stream-to-pcm [audio-stream]
   "convert audio input stream to a pcm stream"
   (let [ audio-format (. audio-stream getFormat)
-         new-format (AudioFormat. AudioFormat$Encoding/PCM_SIGNED
-                                  (. audio-format getSampleRate)
-                                  16
-                                  (. audio-format getChannels)
-                                  (* 2 (. audio-format getChannels))
-                                  (. audio-format getSampleRate)
-                                  false) ]
+        new-format (AudioFormat. AudioFormat$Encoding/PCM_SIGNED
+                                 (. audio-format getSampleRate)
+                                 16
+                                 (. audio-format getChannels)
+                                 (* 2 (. audio-format getChannels))
+                                 (. audio-format getSampleRate)
+                                 false) ]
     (AudioSystem/getAudioInputStream new-format audio-stream)))
 
 (defn coerce-stream-to-pcm [audio-stream]
-  (if-not (is-pcm? audio-stream) (stream-to-pcm audio-stream) audio-stream))
+  (if-not (is-pcm? audio-stream)
+    (stream-to-pcm audio-stream)
+    audio-stream))
 
 (defn get-audio-input-stream [url]
   (coerce-stream-to-pcm (AudioSystem/getAudioInputStream url)))
@@ -71,4 +72,7 @@
                                     (if (= (. event getType) event-type)
                                       (listener-fn event))))))
       (.open clip stream)
-      (.start clip))))
+      (.start clip)
+      (.drain clip)
+      (.stop clip)
+      (.close stream))))
