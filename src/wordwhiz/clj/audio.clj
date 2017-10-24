@@ -75,4 +75,5 @@
       (.start clip)
       (.drain clip)
       (.stop clip)
+      (.close clip)
       (.close stream))))

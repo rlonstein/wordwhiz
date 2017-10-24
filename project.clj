@@ -8,7 +8,6 @@
                  [org.clojure/java.jdbc "0.7.3"]
                  [org.xerial/sqlite-jdbc "3.20.1"]
                  [com.github.trilarion/vorbis-support "1.1.0"]
-                 [com.googlecode.soundlibs/mp3spi "1.9.5.4"]
                  [org.apache.pivot/pivot-core "2.0.5"]
                  [org.apache.pivot/pivot-wtk "2.0.5"]
                  [org.apache.pivot/pivot-wtk-terra "2.0.5"]]
