@@ -7,7 +7,9 @@
 
 (ns wordwhiz.clj.ui
   (:require wordwhiz.clj.core
-            wordwhiz.clj.audio)
+            wordwhiz.clj.audio
+            [clojure.tools.nrepl.server :as nrepl-server]
+            [cider.nrepl :refer (cider-nrepl-handler)])
   (:import
    (java.net URL)
    (org.apache.pivot)
@@ -212,6 +214,7 @@ relies on parsing id of widgit, returns nil on failure"
 
 (defn -main [& args]
   "Entry point for application-style (desktop) execution"
+  (nrepl-server/start-server :port 7888 :handler cider-nrepl-handler)
   (. DesktopApplicationContext applyStylesheet uistylesheet)
   (. DesktopApplicationContext main wordwhiz.clj.ui (into-array String args))
   (. DesktopApplicationContext queueCallback do-startup-board true))
