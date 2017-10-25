@@ -47,9 +47,6 @@
 (defn get-audio-input-stream [url]
   (coerce-stream-to-pcm (AudioSystem/getAudioInputStream url)))
 
-;; (defn get-audio-input-stream [filename]
-;;   (coerce-stream-to-pcm (AudioSystem/getAudioInputStream (File. filename))))
-
 (defn listener-event-types []
   "Return mapping of event names to underlying implementation types"
   {

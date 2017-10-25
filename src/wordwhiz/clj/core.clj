@@ -6,21 +6,14 @@
 ;;;
 
 (ns wordwhiz.clj.core
-  (:require (clojure.java.io)
-            [clojure.java.jdbc :as jdbc]
-            [clojure.string :as str]))
+  (:require
+   [wordwhiz.clj.utils :as utils]
+   [clojure.java.jdbc :as jdbc]
+   [clojure.string :as str]))
 
 (def board-dim {:x 12 :y 7})
 (def rack-size 16)
 (def max-word-length rack-size)
-
-;; (defn get-system-resource [s]
-;; (. ClassLoader getSystemResource s))
-
-(defn get-system-resource [s]
-  (clojure.java.io/resource s))
-
-;;(def dictfile (get-system-resource "word.list"))
 
 ;;(def debug false)
 
@@ -87,7 +80,7 @@
 
 (defn valid-word? [word]
   "Check word against the dictionary"
-  (let [db-str (str "jdbc:sqlite::resource:" (get-system-resource "words.db.sqlite"))
+  (let [db-str (str "jdbc:sqlite::resource:" (utils/get-system-resource "words.db.sqlite"))
         sql "SELECT COUNT(*) as found FROM dictionary WHERE word = ? LIMIT 1"
         word (.toLowerCase word)]
     (not (zero? (:found (first (jdbc/query db-str [sql word])))))))

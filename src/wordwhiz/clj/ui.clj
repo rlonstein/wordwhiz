@@ -6,8 +6,9 @@
 ;;;
 
 (ns wordwhiz.clj.ui
-  (:require wordwhiz.clj.core
-            wordwhiz.clj.audio
+  (:require [wordwhiz.clj.core :as core]
+            [wordwhiz.clj.audio :as audio]
+            [wordwhiz.clj.utils :as utils]
             [clojure.tools.nrepl.server :as nrepl-server]
             [cider.nrepl :refer (cider-nrepl-handler)])
   (:import
@@ -47,7 +48,7 @@
 (def serializer (ref (org.apache.pivot.beans.BXMLSerializer.)))
 (def window (ref nil))
 ;;(def debug (atom false))
-(def state (ref (wordwhiz.clj.core/new-game)))
+(def state (ref (core/new-game)))
 
 (defmacro notnull! [v]
   "convenience macro for liberally asserting not null"
@@ -122,8 +123,8 @@ Performs getName() on org.apache.pivot.wtk.Component or stringifies the object"
 (defn update-board [game]
   (doseq [col (range 0 (:x (:board-dim game)))
           row (range 0 (:y (:board-dim game)))]
-    (let [tile (wordwhiz.clj.core/tile-at (:board game) col row)
-          old-tile (wordwhiz.clj.core/tile-at (:board-prev game) col row)]
+    (let [tile (core/tile-at (:board game) col row)
+          old-tile (core/tile-at (:board-prev game) col row)]
       (if (not (= tile old-tile))
         ;; notice the monkey-business here...
         ;; ui layout row,col but board structure is col,row
@@ -137,7 +138,7 @@ Performs getName() on org.apache.pivot.wtk.Component or stringifies the object"
   "Update the images in the rack, run only for the ui side-effect"
   (notnull! game)
   (doseq [ idx (range 0 (:rack-size game))]
-    (let [letter (wordwhiz.clj.core/rack-nth idx game)
+    (let [letter (core/rack-nth idx game)
           tile-img (char->tileimage letter)
           widgit (get-nth-rack-widgit idx)]
       (update-widgit-image widgit tile-img))))
@@ -146,7 +147,7 @@ Performs getName() on org.apache.pivot.wtk.Component or stringifies the object"
   "Return a pivot style for the score ui element based on game state"
   (let [color {:normal "#000000" :bad "#CC3333" :good "#33CC33"}]
     (format "{color: '%S'}" (cond (nil? (first (:rack game))) (:normal color)
-                                  (zero? (wordwhiz.clj.core/rack->score game)) (:bad color)
+                                  (zero? (core/rack->score game)) (:bad color)
                                   true (:good color)))))
 
 (defn update-rackscore [game]
@@ -155,7 +156,7 @@ Performs getName() on org.apache.pivot.wtk.Component or stringifies the object"
   (let [target (get-named-component "rackscore")]
     (notnull! target)
     (.setStyles target (get-score-style game))
-    (.setText target (.toString (wordwhiz.clj.core/rack->score game)))))
+    (.setText target (.toString (core/rack->score game)))))
 
 (defn update-gamescore [game]
   "Modify the game score ui element"
@@ -178,7 +179,7 @@ relies on parsing id of widgit, returns nil on failure"
   (.setEnabled (get-named-component name) enabled))
 
 (defn toggle-score-btn [game]
-  (set-btn-enabled "btnScore" (not (zero? (wordwhiz.clj.core/rack->score game)))))
+  (set-btn-enabled "btnScore" (not (zero? (core/rack->score game)))))
 
 (defn toggle-undo-btn [game]
   (set-btn-enabled "btnUndo" (not (nil? (first (:history game))))))
@@ -192,13 +193,13 @@ relies on parsing id of widgit, returns nil on failure"
 
 (defn game-won []
   (let [serializer (org.apache.pivot.beans.BXMLSerializer.)
-        dialog (.. serializer (readObject (wordwhiz.clj.core/get-system-resource (:win uifiles))))
+        dialog (.. serializer (readObject (utils/get-system-resource (:win uifiles))))
         label-metrics (.get (.getNamespace serializer) "metrics")]
     (.setText label-metrics (str "Score: " (:score @state)))
     (.open dialog (.getDisplay @window) @window
            (proxy [SheetCloseListener] []
              (sheetClosed [s]
-               (dosync (ref-set state (wordwhiz.clj.core/new-game)))
+               (dosync (ref-set state (core/new-game)))
                (startup-board @state))))
     (wordwhiz.clj.audio/play-sound (get-resource "audio/cheer.ogg"))))
 
@@ -224,11 +225,11 @@ relies on parsing id of widgit, returns nil on failure"
   "Render the ui"
   (dosync
    (ref-set window
-            (.readObject @serializer (wordwhiz.clj.core/get-system-resource (:main uifiles)))))
+            (.readObject @serializer (utils/get-system-resource (:main uifiles)))))
   (.setPreferredSize @window 800 468)
   (.open @window display)
   (.. (org.apache.pivot.beans.BXMLSerializer.)
-      (readObject (wordwhiz.clj.core/get-system-resource (:rules uifiles)))
+      (readObject (utils/get-system-resource (:rules uifiles)))
       (open display @window)))
 
 (defn -resume [this])
@@ -286,7 +287,7 @@ relies on parsing id of widgit, returns nil on failure"
   (attach-button-listener btn (fn [b]
                                 (wordwhiz.clj.audio/play-sound (get-resource "audio/wooden_ball.ogg"))
                                 (dosync
-                                 (alter state wordwhiz.clj.core/rack-tile (button-to-column b)))
+                                 (alter state core/rack-tile (button-to-column b)))
                                 (doto @state
                                   (toggle-score-btn)
                                   (toggle-undo-btn)
@@ -298,7 +299,7 @@ relies on parsing id of widgit, returns nil on failure"
   "post-init for 'ResetButton', attaches action func"
   (attach-button-listener btn (fn [b]
                                 (wordwhiz.clj.audio/play-sound (get-resource "audio/whoosh.ogg"))
-                                (dosync (alter state wordwhiz.clj.core/reset-game))
+                                (dosync (alter state core/reset-game))
                                 (doto @state
                                   (update-board)
                                   (update-rack)
@@ -309,21 +310,21 @@ relies on parsing id of widgit, returns nil on failure"
 (defn score-attach-listener [btn]
   "post-init for 'ScoreButton', attaches action func"
   (attach-button-listener btn (fn [b]
-                                (when (not (zero? (wordwhiz.clj.core/rack->score @state)))
+                                (when (not (zero? (core/rack->score @state)))
                                   (wordwhiz.clj.audio/play-sound (get-resource "audio/mechanical2.ogg"))
-                                  (dosync (alter state wordwhiz.clj.core/score-rack))
+                                  (dosync (alter state core/score-rack))
                                   (doto @state
                                     (toggle-score-btn)
                                     (update-score)
                                     (update-rack))
-                                  (when (wordwhiz.clj.core/no-tiles-left? @state) (game-won))))))
+                                  (when (core/no-tiles-left? @state) (game-won))))))
 
 (defn undo-attach-listener [btn]
   "post-init for 'UndoButton', attaches action func"  
   (attach-button-listener btn (fn [b]
                                 (when (not (zero? (count (:history @state))))
                                   (wordwhiz.clj.audio/play-sound (get-resource "audio/mechanical2.ogg"))
-                                  (dosync (alter state wordwhiz.clj.core/undo-move))
+                                  (dosync (alter state core/undo-move))
                                   (doto @state
                                     (toggle-score-btn)
                                     (toggle-undo-btn)
@@ -334,8 +335,8 @@ relies on parsing id of widgit, returns nil on failure"
 (defn newgame-attach-listener [btn]
   "post-init for 'NewGameButton', attaches action func"
   (attach-button-listener btn (fn [b]
-                                (wordwhiz.clj.audio/play-sound (get-resource "audio/toilet_flush.ogg"))
-                                (dosync (ref-set state (wordwhiz.clj.core/new-game)))
+                                (audio/play-sound (get-resource "audio/toilet_flush.ogg"))
+                                (dosync (ref-set state (core/new-game)))
                                 (doto @state
                                   (toggle-score-btn)
                                   (update-rack)
@@ -345,9 +346,9 @@ relies on parsing id of widgit, returns nil on failure"
 (defn quit-attach-listener [btn]
   "post-init for 'QuitButton', attaches action func"
   (attach-button-listener btn (fn [b]
-                                (wordwhiz.clj.audio/play-sound (get-resource "audio/vicki-bye.ogg")
-                                   (fn [e] (java.lang.System/exit 0))
-                                   (:stop (wordwhiz.clj.audio/listener-event-types))))))
+                                (audio/play-sound (get-resource "audio/vicki-bye.ogg")
+                                                  (fn [e] (java.lang.System/exit 0))
+                                                  (:stop (audio/listener-event-types))))))
 
 (defn checkbox-attach-listener [btn]
   "post-init for 'CheckBox', attaches action func"

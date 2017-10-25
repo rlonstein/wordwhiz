@@ -10,7 +10,8 @@
                  [org.apache.pivot/pivot-core "2.0.5"]
                  [org.apache.pivot/pivot-wtk "2.0.5"]
                  [org.apache.pivot/pivot-wtk-terra "2.0.5"]
-                 [cider/cider-nrepl "0.15.1"]]
+                 [cider/cider-nrepl "0.15.1"]
+                 ]
   :dev-dependencies [[clojure-source "1.8.0"]]
   :resources-path "resources"
   :jar-name "wordwhiz.jar"
