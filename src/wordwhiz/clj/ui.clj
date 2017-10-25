@@ -119,18 +119,19 @@ Performs getName() on org.apache.pivot.wtk.Component or stringifies the object"
     (str "image/tiles/tile-ivory-" c ".png")
     (str "image/tiles/tile-blank.png")))
 
-(defn update-board [game & {:keys [sleepms]}]
+(defn update-board [game]
   (doseq [col (range 0 (:x (:board-dim game)))
           row (range 0 (:y (:board-dim game)))]
-    ;; notice the monkey-business here...
-    ;; ui layout row,col but board structure is col,row
     (let [tile (wordwhiz.clj.core/tile-at (:board game) col row)
-          tile-img (char->tileimage tile)
-          widgit (get-widgit-at row col)]
-      (when sleepms (Thread/sleep sleepms))
-      (notnull! tile-img)
-      (notnull! widgit)
-      (update-widgit-image widgit tile-img))))
+          old-tile (wordwhiz.clj.core/tile-at (:board-prev game) col row)]
+      (if (not (= tile old-tile))
+        ;; notice the monkey-business here...
+        ;; ui layout row,col but board structure is col,row
+        (let [tile-img (char->tileimage tile)
+              widgit (get-widgit-at row col)]
+          (notnull! tile-img)
+          (notnull! widgit)
+          (update-widgit-image widgit tile-img))))))
 
 (defn update-rack [game]
   "Update the images in the rack, run only for the ui side-effect"

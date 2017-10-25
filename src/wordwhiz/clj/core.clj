@@ -54,7 +54,7 @@
   )    ;; Scrabble(tm) also (\SPACE 0 2)
 
 
-(defstruct game-state :tiles :history :score :board :rack :playing :board-dim)
+(defstruct game-state :tiles :history :score :board :board-prev :rack :playing :board-dim)
 
 ;; (defn read-dict [fn]
 ;; "Read a wordlist from a file, returning the newly created set"
@@ -65,6 +65,7 @@
                     :history ()
                     :score 0
                     :board []
+                    :board-prev []
                     :board-dim board-dim
                     :rack []
                     :rack-size rack-size
@@ -135,8 +136,9 @@ on tile distribution and word length"
     (if (and (not (nil? tile)) (not (rack-full? game)))
       (let [rack (conj (:rack game) tile)
             history (conj (:history game) (list \M col tile) )
+            board-prev (:board game)
             board (assoc (:board game) col column)]
-        (merge game {:board board :rack rack :history history}))
+        (merge game {:board board :board-prev board-prev :rack rack :history history}))
       game)))
 
 (defn tile-at [board x y]
@@ -146,6 +148,7 @@ on tile distribution and word length"
 (defn reset-game [game]
   "Return a game with any modified state reset to starting condition"
   (merge game {:board (fill-board (:tiles game))
+               :board-prev []
                :rack (:rack game-defaults)
                :score (:score game-defaults)
                :history (:history game-defaults)}))
@@ -187,6 +190,7 @@ on tile distribution and word length"
 ;;                     (when debug (println "undo-move: " last-move action tile column))
                      (merge game {:history history
                                   :rack (vec (butlast (:rack game)))
+                                  :board-prev (:board game)
                                   :board (assoc (:board game) column (vec (cons tile (board-col game column))))}))
      (= \S action) (let [points (nth last-move 1) rack (nth last-move 2)]
 ;;                     (when debug (println "undo-move: " last-move action points rack)) 
