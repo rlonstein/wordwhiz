@@ -6,8 +6,13 @@
 ;;;
 
 (ns wordwhiz.clj.audio
-  (:import (java.io File)
-           (javax.sound.sampled AudioFormat
+  (:require
+   [clojure.java.io :as io]
+   [wordwhiz.clj.utils :as utils])
+  (:import
+   (java.io ByteArrayOutputStream
+            ByteArrayInputStream)
+   (javax.sound.sampled AudioFormat
                                 AudioFormat$Encoding
                                 AudioInputStream
                                 AudioSystem
@@ -20,6 +25,7 @@
                                 LineUnavailableException)))
 
 (def mute (atom false))
+(def sounds (atom {}))
 
 (defn toggle-mute []
   (reset! mute (not @mute)))
@@ -47,6 +53,12 @@
 (defn get-audio-input-stream [url]
   (coerce-stream-to-pcm (AudioSystem/getAudioInputStream url)))
 
+(defn get-bytes [url]
+  (with-open [src (io/input-stream url)
+              dst (ByteArrayOutputStream.)]
+    (io/copy src dst)
+    (.toByteArray dst)))
+
 (defn listener-event-types []
   "Return mapping of event names to underlying implementation types"
   {
@@ -57,9 +69,9 @@
    }
   )
 
-(defn play-sound [url & [listener-fn event-type]]
+(defn play [bytes & [listener-fn event-type]]
   (if-not @mute
-    (let [stream (get-audio-input-stream url)
+    (let [stream (get-audio-input-stream (ByteArrayInputStream. bytes))
           format (. stream getFormat)
           info (DataLine$Info. Clip format)
           #^Clip clip (AudioSystem/getLine info)]
@@ -73,4 +85,16 @@
       (.drain clip)
       (.stop clip)
       (.close clip)
-      (.close stream))))
+      (.close stream)))
+  nil)
+
+(defn preload []
+  (let [ clips {:cheer "audio/cheer.ogg"
+                :tile "audio/wooden_ball.ogg"
+                :reset "audio/whoosh.ogg"
+                :clunk "audio/mechanical2.ogg"
+                :flush "audio/toilet_flush.ogg"
+                :bye "audio/vicki-bye.ogg"} ]
+    (reset! sounds
+            (zipmap (keys clips)
+                    (map #(get-bytes (utils/get-system-resource %1)) (vals clips))))))
